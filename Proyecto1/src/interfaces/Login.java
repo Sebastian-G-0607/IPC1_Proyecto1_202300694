@@ -1,9 +1,8 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
 package interfaces;
 
+ //Importando las librerías que escriben el arraylist y el binario:
+import clases.Escribir_InvestigadorBinario;
+import clases.Escribir_investigador;
 import javax.swing.JOptionPane;
 
 /**
@@ -12,6 +11,7 @@ import javax.swing.JOptionPane;
  */
 public class Login extends javax.swing.JFrame {
     
+    //Variables que almacenarán los datos del JTextField
     private String user = "";
     private String password = "";
 
@@ -166,23 +166,28 @@ public class Login extends javax.swing.JFrame {
 
     }//GEN-LAST:event_jPanel2MouseClicked
 
+    //Método que captura el evento del botón del Login.
     private void label_botonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_label_botonMouseClicked
         
+        //Se capturan las cadenas ingresadas en el JTextField
         user = log_user.getText().trim();
         password = String.valueOf(log_password.getPassword());
         
+        //Instrucciones si el usuario no ingresa algún campo
         if(user.equals("") || password.equals("")){
             JOptionPane.showMessageDialog(null, "Debe completar todos los campos");
             log_user.setText("");
             log_password.setText("");
         }
+        //Si el usuario ingresa "admin" como usuario y contraseña, se desplegará el modulo de administrador
         else if(user.equals("admin") && password.equals("admin")){
             dispose();
             new Administrador().setVisible(true);
         }
-        //else if(){
+        //Condición si el usuario ingresa un usuario y contraseña de un investigador válido
+        /*else if(){
             
-        //}
+        }*/
         else{
             JOptionPane.showMessageDialog(null, "No se encontraron coincidencias, ingrese un usuario y contraseña válidos");
             log_user.setText("");
@@ -216,7 +221,11 @@ public class Login extends javax.swing.JFrame {
             java.util.logging.Logger.getLogger(Login.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
-
+        
+        //Al iniciar el programa, se leen los objetos de tipo Investigador del archivo binario y se agreguen al arraylist
+        Escribir_InvestigadorBinario.leer_investigadorbin();
+        
+        
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {

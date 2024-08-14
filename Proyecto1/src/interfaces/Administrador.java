@@ -1,8 +1,8 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
 package interfaces;
+
+//Se importan las bibliotecas de objeto investigador y para escribir los investigadores en el arraylist
+import clases.Escribir_investigador;
+import clases.Investigador;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -14,6 +14,10 @@ public class Administrador extends javax.swing.JFrame {
     /**
      * Creates new form Administrador
      */
+    
+    //Se crea un dtm para agregar y actualizar datos de la tabla
+    public static DefaultTableModel dtm1 = new DefaultTableModel();
+    
     public Administrador() {
         
         initComponents();
@@ -22,10 +26,18 @@ public class Administrador extends javax.swing.JFrame {
         setResizable(false);
         setLocationRelativeTo(null);
         
+        //Encabezados de las columnas de la tabla
+        String id[] = {"Código", "Nombre", "Genero", "Experimentos"};
+        dtm1.setColumnIdentifiers(id);
+        tabla_investigadores.setModel(dtm1);
         
-        
-        
-        
+        //Se lee el arraylist y se agregan los elementos al JTable, si no hay elementos no se realiza ninguna acción
+        if(Escribir_investigador.investigadores != null || Escribir_investigador.investigadores.size() != 0){
+            for(Investigador investigador_temp:Escribir_investigador.investigadores){
+                dtm1.addRow(new Object[]{investigador_temp.getCodigo(),investigador_temp.getNombre(), investigador_temp.getGenero(), investigador_temp.getNumExperimentos()});
+            }
+        }
+         
     }
     
 
@@ -63,8 +75,18 @@ public class Administrador extends javax.swing.JFrame {
         cargar_btn.setText("CARGAR");
 
         actualizar_btn.setText("ACTUALIZAR");
+        actualizar_btn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                actualizar_btnActionPerformed(evt);
+            }
+        });
 
         eliminar_btn.setText("ELIMINAR");
+        eliminar_btn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                eliminar_btnActionPerformed(evt);
+            }
+        });
 
         tabla_investigadores.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -169,9 +191,19 @@ public class Administrador extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    //Método que captura el evento del botón crear
     private void crear_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_crear_btnActionPerformed
-        // TODO add your handling code here:
+        new Crear_Investigador().setVisible(true);                
     }//GEN-LAST:event_crear_btnActionPerformed
+
+    //Método que captura el evento del botón actualizar
+    private void actualizar_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_actualizar_btnActionPerformed
+        new Actualizar_Investigador().setVisible(true);        // TODO add your handling code here:
+    }//GEN-LAST:event_actualizar_btnActionPerformed
+
+    private void eliminar_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_eliminar_btnActionPerformed
+        new Eliminar_Investigador().setVisible(true);
+    }//GEN-LAST:event_eliminar_btnActionPerformed
 
     /**
      * @param args the command line arguments
@@ -182,6 +214,7 @@ public class Administrador extends javax.swing.JFrame {
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
          * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
          */
+        System.out.println(dtm1.getRowCount());
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
                 if ("Nimbus".equals(info.getName())) {
@@ -199,7 +232,9 @@ public class Administrador extends javax.swing.JFrame {
             java.util.logging.Logger.getLogger(Administrador.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
-
+        
+        
+        
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {

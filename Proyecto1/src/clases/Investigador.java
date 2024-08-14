@@ -4,17 +4,24 @@
  */
 package clases;
 
+import java.io.Serializable;
+
 /**
  *
  * @author sebas
  */
-public class Investigador {
+public class Investigador implements Serializable{
     
     private String codigo;
     private String nombre;
     private char genero;
     private int numExperimentos;
     private Muestras muestra_asignada;
+    private String contrasenia;
+    
+    public Investigador(){
+        
+    }
     
     public Investigador(String codigo, String nombre, char genero, int numExperimentos, Muestras muestra_asignada){
         this.codigo = codigo;
@@ -22,6 +29,13 @@ public class Investigador {
         this.genero = genero;
         this.numExperimentos = numExperimentos;
         this.muestra_asignada = muestra_asignada;
+    }
+    
+    public Investigador(String codigo, String nombre, char genero, String contrasenia){
+        this.codigo = codigo;
+        this.nombre = nombre;
+        this.genero = genero;
+        this.contrasenia = contrasenia;
     }
 
     /**
@@ -64,7 +78,7 @@ public class Investigador {
      */
     public void setGenero(char genero) {
         this.genero = genero;
-    }
+        }
 
     /**
      * @return the numExperimentos
@@ -92,6 +106,20 @@ public class Investigador {
      */
     public void setMuestra_asignada(Muestras muestra_asignada) {
         this.muestra_asignada = muestra_asignada;
+    }
+
+    /**
+     * @return the contrasenia
+     */
+    public String getContrasenia() {
+        return contrasenia;
+    }
+
+    /**
+     * @param contrasenia the contrasenia to set
+     */
+    public void setContrasenia(String contrasenia) {
+        this.contrasenia = contrasenia;
     }
     
     
