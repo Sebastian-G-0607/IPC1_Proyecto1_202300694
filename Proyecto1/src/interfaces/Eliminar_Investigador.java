@@ -4,6 +4,11 @@
  */
 package interfaces;
 
+import clases.Actualizar_Tabla;
+import clases.Escribir_InvestigadorBinario;
+import clases.Escribir_investigador;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author sebas
@@ -15,6 +20,8 @@ public class Eliminar_Investigador extends javax.swing.JFrame {
      */
     public Eliminar_Investigador() {
         initComponents();
+        setLocationRelativeTo(null);
+        setTitle("Eliminar Investigador");
     }
 
     /**
@@ -30,7 +37,7 @@ public class Eliminar_Investigador extends javax.swing.JFrame {
         field_codigo = new javax.swing.JTextField();
         eliminar_btn = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         label_codigo.setText("Código:");
 
@@ -73,7 +80,29 @@ public class Eliminar_Investigador extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void eliminar_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_eliminar_btnActionPerformed
-        // TODO add your handling code here:
+        String codigo, nombre;
+        codigo = field_codigo.getText();
+        int index = -1;
+        int longitud = Escribir_investigador.investigadores.size();
+        for(int i=0; i<longitud; i++){
+            if(codigo.equals(Escribir_investigador.investigadores.get(i).getCodigo())){
+                index = i;
+            }
+        }
+        System.out.println(index);
+        if(index == -1){
+            JOptionPane.showMessageDialog(null, "No se encontraron coincidencias de código");
+        }
+        else{
+            nombre = Escribir_investigador.investigadores.get(index).getNombre();
+            Escribir_investigador.investigadores.remove(index);
+            JOptionPane.showMessageDialog(null,"Se eliminó el investigador " + codigo + " - " + nombre);
+            Actualizar_Tabla.eliminar_elemento(Administrador.dtm1, index);
+            Escribir_InvestigadorBinario.escribir_investigadorbin();
+            Escribir_investigador.Escribir_investigadorCombo(Administrador.combo_investigador, Escribir_investigador.investigadores);
+        }
+        
+        
     }//GEN-LAST:event_eliminar_btnActionPerformed
 
     /**

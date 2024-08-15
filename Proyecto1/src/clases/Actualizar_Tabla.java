@@ -13,6 +13,7 @@ import javax.swing.table.DefaultTableModel;
  */
 public class Actualizar_Tabla {
 
+    //Método estático para ingresar un nuevo investigador a la tabla del módulo de administrador
     public static void nuevo_elemento(DefaultTableModel dtm, List<Investigador> investigador) {
         
         int longitud = investigador.size();
@@ -23,14 +24,18 @@ public class Actualizar_Tabla {
         
     }
     
+    //Método estático para actualizar un elemento de la tabla de investigadores
     public static void actualizar_elemento(DefaultTableModel dtm, int index, List<Investigador> investigador) {
         
         dtm.setValueAt(investigador.get(index).getNombre(), index, 1);
         dtm.setValueAt(String.valueOf(investigador.get(index).getGenero()), index, 2);
-        dtm.setValueAt(investigador.get(index).getContrasenia(), index, 3);
+        dtm.setValueAt(investigador.get(index).getNumExperimentos(), index, 3);
         
     }
     
-    
-    
+    //Método estático para eliminar un elemento de la tabla de investigadores
+    public static void eliminar_elemento(DefaultTableModel dtm, int index){
+        dtm.removeRow(index);
+    }
+     
 }

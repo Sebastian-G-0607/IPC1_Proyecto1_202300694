@@ -139,10 +139,10 @@ public class Crear_Investigador extends javax.swing.JFrame {
         }
         
         if(codigo.equals("") || nombre.equals("") || contrasenia.equals("") || genero == '\u0000'){
-            JOptionPane.showMessageDialog(null,"Ingrese todos los campos");
+            JOptionPane.showMessageDialog(null,"Ingrese todos los campos", "Error al crear el investigador", JOptionPane.WARNING_MESSAGE);
         }
         else if(genero != 'M' && genero != 'F' ){
-            JOptionPane.showMessageDialog(null, "Ingrese un género válido");
+            JOptionPane.showMessageDialog(null, "Ingrese un género válido", "Error al crear el investigador", JOptionPane.WARNING_MESSAGE);
         }
         else if(!Escribir_investigador.investigadores.isEmpty() && Escribir_investigador.comparar_codigo(codigo) == true){
             JOptionPane.showMessageDialog(null,"El código que ingresó ya existe, ingrese uno válido");
@@ -160,6 +160,7 @@ public class Crear_Investigador extends javax.swing.JFrame {
             Escribir_InvestigadorBinario.escribir_investigadorbin();
             
             Actualizar_Tabla.nuevo_elemento(Administrador.dtm1, Escribir_investigador.investigadores);
+            Escribir_investigador.Escribir_investigadorCombo(Administrador.combo_investigador, Escribir_investigador.investigadores);
             
             JOptionPane.showMessageDialog(null,"Investigador ingresado correctamente");
             

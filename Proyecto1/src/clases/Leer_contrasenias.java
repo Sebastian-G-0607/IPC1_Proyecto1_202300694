@@ -13,8 +13,15 @@ import java.util.ArrayList;
  */
 public class Leer_contrasenias {
     
-    List<String> Usuarios = new ArrayList<String> ();
-    
-    List<String> Contrasenias = new ArrayList<String> ();
-    
+    public static boolean leer_contrasenias(String user, String password, List<Investigador> investigador){
+        boolean band = false;
+        
+        for(Investigador investigador_temp:investigador){
+            if(user.equals(investigador_temp.getCodigo()) && password.equals(investigador_temp.getContrasenia())){
+                band = true;
+            }
+        }
+        
+        return band;
+    }
 }

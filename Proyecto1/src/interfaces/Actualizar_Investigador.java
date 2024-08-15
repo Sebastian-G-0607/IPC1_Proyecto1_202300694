@@ -207,6 +207,7 @@ public class Actualizar_Investigador extends javax.swing.JFrame {
                 Escribir_investigador.investigadores.get(index).setContrasenia(contrasenia);
                 Escribir_InvestigadorBinario.escribir_investigadorbin();
                 Actualizar_Tabla.actualizar_elemento(Administrador.dtm1, index, Escribir_investigador.investigadores);
+                Escribir_investigador.Escribir_investigadorCombo(Administrador.combo_investigador, Escribir_investigador.investigadores);
                 JOptionPane.showMessageDialog(null,"Se actualizó el investigador correctamente");
                 dispose();
             }

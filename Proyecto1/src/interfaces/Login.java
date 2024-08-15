@@ -3,6 +3,7 @@ package interfaces;
  //Importando las librerías que escriben el arraylist y el binario:
 import clases.Escribir_InvestigadorBinario;
 import clases.Escribir_investigador;
+import clases.Leer_contrasenias;
 import javax.swing.JOptionPane;
 
 /**
@@ -175,7 +176,7 @@ public class Login extends javax.swing.JFrame {
         
         //Instrucciones si el usuario no ingresa algún campo
         if(user.equals("") || password.equals("")){
-            JOptionPane.showMessageDialog(null, "Debe completar todos los campos");
+            JOptionPane.showMessageDialog(null, "Debe completar todos los campos", "Error al iniciar sesión", JOptionPane.ERROR_MESSAGE);
             log_user.setText("");
             log_password.setText("");
         }
@@ -185,11 +186,12 @@ public class Login extends javax.swing.JFrame {
             new Administrador().setVisible(true);
         }
         //Condición si el usuario ingresa un usuario y contraseña de un investigador válido
-        /*else if(){
-            
-        }*/
+        else if(Leer_contrasenias.leer_contrasenias(user, password, Escribir_investigador.investigadores) == true){
+            dispose();
+            new Investigador().setVisible(true);
+        }
         else{
-            JOptionPane.showMessageDialog(null, "No se encontraron coincidencias, ingrese un usuario y contraseña válidos");
+            JOptionPane.showMessageDialog(null, "No se encontraron coincidencias, ingrese un usuario y contraseña válidos", "Error al iniciar sesión", JOptionPane.ERROR_MESSAGE);
             log_user.setText("");
             log_password.setText("");
         }
@@ -222,7 +224,7 @@ public class Login extends javax.swing.JFrame {
         }
         //</editor-fold>
         
-        //Al iniciar el programa, se leen los objetos de tipo Investigador del archivo binario y se agreguen al arraylist
+        //Al iniciar el programa, se leeaaadn los objetos de tipo Investigador del archivo binario y se agreguen al arraylist
         Escribir_InvestigadorBinario.leer_investigadorbin();
         
         

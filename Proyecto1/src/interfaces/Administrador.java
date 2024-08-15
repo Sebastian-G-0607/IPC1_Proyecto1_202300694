@@ -3,7 +3,10 @@ package interfaces;
 //Se importan las bibliotecas de objeto investigador y para escribir los investigadores en el arraylist
 import clases.Escribir_investigador;
 import clases.Investigador;
+import javax.swing.JButton;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import clases.RenderTabla;
 
 /**
  *
@@ -17,6 +20,10 @@ public class Administrador extends javax.swing.JFrame {
     
     //Se crea un dtm para agregar y actualizar datos de la tabla
     public static DefaultTableModel dtm1 = new DefaultTableModel();
+    //public static DefaultTableModel dtm_muestras = new DefaultTableModel();
+    
+    //Creación del botón VER de la tabla de muestras
+    JButton ver = new JButton("VER");
     
     public Administrador() {
         
@@ -31,15 +38,29 @@ public class Administrador extends javax.swing.JFrame {
         dtm1.setColumnIdentifiers(id);
         tabla_investigadores.setModel(dtm1);
         
+        tabla_muestras();
+        
         //Se lee el arraylist y se agregan los elementos al JTable, si no hay elementos no se realiza ninguna acción
         if(Escribir_investigador.investigadores != null || Escribir_investigador.investigadores.size() != 0){
             for(Investigador investigador_temp:Escribir_investigador.investigadores){
                 dtm1.addRow(new Object[]{investigador_temp.getCodigo(),investigador_temp.getNombre(), investigador_temp.getGenero(), investigador_temp.getNumExperimentos()});
+                combo_investigador.addItem(investigador_temp.getNombre());
             }
         }
          
+        
+        
     }
     
+    public void tabla_muestras(){
+        tabla_muestras.setDefaultRenderer(Object.class, new RenderTabla());
+        //DefaultTableModel dtm_muestras = new DefaultTableModel(new Object[][]{{"agadg", "ags","ag",ver},{"gadg","gad","fad",ver}}, new Object[]{"Código", "Descripción", "Estado", "Acciones"});
+        DefaultTableModel dtm_muestras = new DefaultTableModel();
+        String[] id = {"Código", "Descripción", "Estado", "Acciones"};
+        dtm_muestras.setColumnIdentifiers(id);
+        tabla_muestras.setModel(dtm_muestras);
+        tabla_muestras.setRowHeight(30);
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -59,8 +80,19 @@ public class Administrador extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         tabla_investigadores = new javax.swing.JTable();
         pestaña_muestras = new javax.swing.JPanel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        tabla_muestras = new javax.swing.JTable();
+        jButton1 = new javax.swing.JButton();
+        jButton2 = new javax.swing.JButton();
         pestaña_asignacion = new javax.swing.JPanel();
+        label_investigador = new javax.swing.JLabel();
+        label_muestra = new javax.swing.JLabel();
+        combo_investigador = new javax.swing.JComboBox<>();
+        combo_muestra = new javax.swing.JComboBox<>();
+        asignar_btn = new javax.swing.JButton();
         pestaña_patrones = new javax.swing.JPanel();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        jTable1 = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -88,6 +120,11 @@ public class Administrador extends javax.swing.JFrame {
             }
         });
 
+        tabla_investigadores = new javax.swing.JTable(){
+            public boolean isCellEditable(int row, int column){
+                return false;
+            }
+        };
         tabla_investigadores.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
@@ -138,41 +175,146 @@ public class Administrador extends javax.swing.JFrame {
 
         panel_admin.addTab("Investigadores", pestaña_investigadores);
 
+        tabla_muestras.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane2.setViewportView(tabla_muestras);
+
+        jButton1.setText("CREAR");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
+        jButton2.setText("CARGAR");
+
         javax.swing.GroupLayout pestaña_muestrasLayout = new javax.swing.GroupLayout(pestaña_muestras);
         pestaña_muestras.setLayout(pestaña_muestrasLayout);
         pestaña_muestrasLayout.setHorizontalGroup(
             pestaña_muestrasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 800, Short.MAX_VALUE)
+            .addGroup(pestaña_muestrasLayout.createSequentialGroup()
+                .addGap(34, 34, 34)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(76, 76, 76)
+                .addGroup(pestaña_muestrasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, 150, Short.MAX_VALUE))
+                .addContainerGap(88, Short.MAX_VALUE))
         );
         pestaña_muestrasLayout.setVerticalGroup(
             pestaña_muestrasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 500, Short.MAX_VALUE)
+            .addGroup(pestaña_muestrasLayout.createSequentialGroup()
+                .addGroup(pestaña_muestrasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(pestaña_muestrasLayout.createSequentialGroup()
+                        .addGap(42, 42, 42)
+                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(29, 29, 29)
+                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(pestaña_muestrasLayout.createSequentialGroup()
+                        .addGap(32, 32, 32)
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 375, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(93, Short.MAX_VALUE))
         );
 
         panel_admin.addTab("Muestras", pestaña_muestras);
+
+        label_investigador.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+        label_investigador.setText("Investigador:");
+
+        label_muestra.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+        label_muestra.setText("Muestra:");
+
+        combo_investigador.setModel(new javax.swing.DefaultComboBoxModel<>());
+        combo_investigador.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                combo_investigadorActionPerformed(evt);
+            }
+        });
+
+        combo_muestra.setModel(new javax.swing.DefaultComboBoxModel<>());
+
+        asignar_btn.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        asignar_btn.setText("ASIGNAR");
+        asignar_btn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                asignar_btnActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout pestaña_asignacionLayout = new javax.swing.GroupLayout(pestaña_asignacion);
         pestaña_asignacion.setLayout(pestaña_asignacionLayout);
         pestaña_asignacionLayout.setHorizontalGroup(
             pestaña_asignacionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 800, Short.MAX_VALUE)
+            .addGroup(pestaña_asignacionLayout.createSequentialGroup()
+                .addGap(159, 159, 159)
+                .addGroup(pestaña_asignacionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(label_investigador)
+                    .addComponent(label_muestra))
+                .addGap(56, 56, 56)
+                .addGroup(pestaña_asignacionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(combo_muestra, javax.swing.GroupLayout.PREFERRED_SIZE, 320, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(combo_investigador, javax.swing.GroupLayout.PREFERRED_SIZE, 320, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(128, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pestaña_asignacionLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(asignar_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(322, 322, 322))
         );
         pestaña_asignacionLayout.setVerticalGroup(
             pestaña_asignacionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 500, Short.MAX_VALUE)
+            .addGroup(pestaña_asignacionLayout.createSequentialGroup()
+                .addGap(104, 104, 104)
+                .addGroup(pestaña_asignacionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(combo_investigador, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(label_investigador))
+                .addGap(54, 54, 54)
+                .addGroup(pestaña_asignacionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(label_muestra)
+                    .addComponent(combo_muestra, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 142, Short.MAX_VALUE)
+                .addComponent(asignar_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(77, 77, 77))
         );
 
         panel_admin.addTab("Asignación de experimentos", pestaña_asignacion);
+
+        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane3.setViewportView(jTable1);
 
         javax.swing.GroupLayout pestaña_patronesLayout = new javax.swing.GroupLayout(pestaña_patrones);
         pestaña_patrones.setLayout(pestaña_patronesLayout);
         pestaña_patronesLayout.setHorizontalGroup(
             pestaña_patronesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 800, Short.MAX_VALUE)
+            .addGroup(pestaña_patronesLayout.createSequentialGroup()
+                .addGap(60, 60, 60)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 411, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(329, Short.MAX_VALUE))
         );
         pestaña_patronesLayout.setVerticalGroup(
             pestaña_patronesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 500, Short.MAX_VALUE)
+            .addGroup(pestaña_patronesLayout.createSequentialGroup()
+                .addGap(41, 41, 41)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 391, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(68, Short.MAX_VALUE))
         );
 
         panel_admin.addTab("Patrones", pestaña_patrones);
@@ -185,7 +327,7 @@ public class Administrador extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(panel_admin)
+            .addComponent(panel_admin, javax.swing.GroupLayout.Alignment.TRAILING)
         );
 
         pack();
@@ -204,6 +346,29 @@ public class Administrador extends javax.swing.JFrame {
     private void eliminar_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_eliminar_btnActionPerformed
         new Eliminar_Investigador().setVisible(true);
     }//GEN-LAST:event_eliminar_btnActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void combo_investigadorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_combo_investigadorActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_combo_investigadorActionPerformed
+
+    private void asignar_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_asignar_btnActionPerformed
+        String investigador;
+        String muestra;
+        
+        if(combo_investigador.getSelectedItem() == null || combo_muestra.getSelectedItem() == null){
+          JOptionPane.showMessageDialog(null, "Error en la asignación", "Error", JOptionPane.ERROR_MESSAGE);  
+        }
+        else{
+            investigador = combo_investigador.getSelectedItem().toString();
+            muestra = combo_muestra.getSelectedItem().toString();
+        }
+        
+        
+    }//GEN-LAST:event_asignar_btnActionPerformed
 
     /**
      * @param args the command line arguments
@@ -245,15 +410,26 @@ public class Administrador extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton actualizar_btn;
+    private javax.swing.JButton asignar_btn;
     private javax.swing.JButton cargar_btn;
+    public static javax.swing.JComboBox<String> combo_investigador;
+    public static javax.swing.JComboBox<String> combo_muestra;
     private javax.swing.JButton crear_btn;
     private javax.swing.JButton eliminar_btn;
+    private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JTable jTable1;
+    private javax.swing.JLabel label_investigador;
+    private javax.swing.JLabel label_muestra;
     private javax.swing.JTabbedPane panel_admin;
     private javax.swing.JPanel pestaña_asignacion;
     private javax.swing.JPanel pestaña_investigadores;
     private javax.swing.JPanel pestaña_muestras;
     private javax.swing.JPanel pestaña_patrones;
     private javax.swing.JTable tabla_investigadores;
+    private javax.swing.JTable tabla_muestras;
     // End of variables declaration//GEN-END:variables
 }

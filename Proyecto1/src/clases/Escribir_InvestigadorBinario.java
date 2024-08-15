@@ -16,9 +16,10 @@ import java.io.ObjectOutputStream;
  */
 public class Escribir_InvestigadorBinario {
     
+    //Método estático para escribir el arraylist de tipo Investigador en el archivo binario
     public static void escribir_investigadorbin(){
         
-        String nombreArchivo = "investigadores.bin";
+        String nombreArchivo = "investigadores.bin"; //Nombre del archivo
         File archivo = new File(nombreArchivo);
         
         try {
@@ -37,6 +38,7 @@ public class Escribir_InvestigadorBinario {
         
     }
     
+    //Método estático para leer el archivo binario cargar los elementos en el arraylist de tipo Investigador
     public static void leer_investigadorbin(){
         
         String nombreArchivo = "investigadores.bin";

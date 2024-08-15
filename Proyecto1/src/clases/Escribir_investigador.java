@@ -6,6 +6,7 @@ package clases;
 
 import java.util.List;
 import java.util.ArrayList;
+import javax.swing.JComboBox;
 
 /**
  *
@@ -33,6 +34,17 @@ public class Escribir_investigador {
         }
         return band;
     }
+    
+    public static void Escribir_investigadorCombo(JComboBox combo, List<Investigador> investigador){
+
+        combo.removeAllItems();
+        for(Investigador investigador_temp:investigador){
+            combo.addItem(investigador_temp.getNombre());
+        }    
+        
+        
+    }
+            
     
       
 }
