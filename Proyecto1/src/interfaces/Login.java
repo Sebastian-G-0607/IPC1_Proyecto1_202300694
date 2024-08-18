@@ -180,16 +180,20 @@ public class Login extends javax.swing.JFrame {
             log_user.setText("");
             log_password.setText("");
         }
+        
         //Si el usuario ingresa "admin" como usuario y contraseña, se desplegará el modulo de administrador
         else if(user.equals("admin") && password.equals("admin")){
             dispose();
             new Administrador().setVisible(true);
         }
-        //Condición si el usuario ingresa un usuario y contraseña de un investigador válido
+        
+        //Condición si el usuario ingresa un usuarioa y contraseña de un investigador válido
         else if(Leer_contrasenias.leer_contrasenias(user, password, Escribir_investigador.investigadores) == true){
             dispose();
             new Investigador().setVisible(true);
         }
+        
+        //Si no se cumple ninguna condición anterior, significa que ni el usuario ni la contraseña son válidos. Se ejecuta la siguiente instrucción.
         else{
             JOptionPane.showMessageDialog(null, "No se encontraron coincidencias, ingrese un usuario y contraseña válidos", "Error al iniciar sesión", JOptionPane.ERROR_MESSAGE);
             log_user.setText("");

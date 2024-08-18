@@ -89,7 +89,6 @@ public class Eliminar_Investigador extends javax.swing.JFrame {
                 index = i;
             }
         }
-        System.out.println(index);
         if(index == -1){
             JOptionPane.showMessageDialog(null, "No se encontraron coincidencias de código");
         }

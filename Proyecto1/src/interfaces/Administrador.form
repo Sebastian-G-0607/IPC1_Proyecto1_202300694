@@ -111,6 +111,9 @@
               <Properties>
                 <Property name="text" type="java.lang.String" value="CARGAR"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="cargar_btnActionPerformed"/>
+              </Events>
             </Component>
             <Component class="javax.swing.JButton" name="actualizar_btn">
               <Properties>

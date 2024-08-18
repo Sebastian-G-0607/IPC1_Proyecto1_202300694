@@ -7,6 +7,10 @@ import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import clases.RenderTabla;
+import clases.Cargar_Investigador;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -20,10 +24,12 @@ public class Administrador extends javax.swing.JFrame {
     
     //Se crea un dtm para agregar y actualizar datos de la tabla
     public static DefaultTableModel dtm1 = new DefaultTableModel();
+    
     //public static DefaultTableModel dtm_muestras = new DefaultTableModel();
     
     //Creación del botón VER de la tabla de muestras
     JButton ver = new JButton("VER");
+    
     
     public Administrador() {
         
@@ -33,11 +39,13 @@ public class Administrador extends javax.swing.JFrame {
         setResizable(false);
         setLocationRelativeTo(null);
         
-        //Encabezados de las columnas de la tabla
+        //Encabezados de las columnas de la tabla Investigadores
         String id[] = {"Código", "Nombre", "Genero", "Experimentos"};
         dtm1.setColumnIdentifiers(id);
+        //Se asigna el dtm1 a la tabla_investigadores
         tabla_investigadores.setModel(dtm1);
         
+        //Se crea la tabla que contiene las muestras
         tabla_muestras();
         
         //Se lee el arraylist y se agregan los elementos al JTable, si no hay elementos no se realiza ninguna acción
@@ -47,11 +55,10 @@ public class Administrador extends javax.swing.JFrame {
                 combo_investigador.addItem(investigador_temp.getNombre());
             }
         }
-         
-        
         
     }
     
+    //Función para crear la tabla que contiene las muestras, especial porque se crea un botón en la última columna.
     public void tabla_muestras(){
         tabla_muestras.setDefaultRenderer(Object.class, new RenderTabla());
         //DefaultTableModel dtm_muestras = new DefaultTableModel(new Object[][]{{"agadg", "ags","ag",ver},{"gadg","gad","fad",ver}}, new Object[]{"Código", "Descripción", "Estado", "Acciones"});
@@ -105,6 +112,11 @@ public class Administrador extends javax.swing.JFrame {
         });
 
         cargar_btn.setText("CARGAR");
+        cargar_btn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cargar_btnActionPerformed(evt);
+            }
+        });
 
         actualizar_btn.setText("ACTUALIZAR");
         actualizar_btn.addActionListener(new java.awt.event.ActionListener() {
@@ -343,6 +355,7 @@ public class Administrador extends javax.swing.JFrame {
         new Actualizar_Investigador().setVisible(true);        // TODO add your handling code here:
     }//GEN-LAST:event_actualizar_btnActionPerformed
 
+    //Método que captura el evento del botón eliminar
     private void eliminar_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_eliminar_btnActionPerformed
         new Eliminar_Investigador().setVisible(true);
     }//GEN-LAST:event_eliminar_btnActionPerformed
@@ -355,13 +368,16 @@ public class Administrador extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_combo_investigadorActionPerformed
 
+    //Método para capturar el evento del botón asignar perteneciente al apartado: Asignación de experimentos.
     private void asignar_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_asignar_btnActionPerformed
         String investigador;
         String muestra;
         
+        //Si alguno de los JComboBox no fue seleccionado, se despliega un mensaje de error
         if(combo_investigador.getSelectedItem() == null || combo_muestra.getSelectedItem() == null){
           JOptionPane.showMessageDialog(null, "Error en la asignación", "Error", JOptionPane.ERROR_MESSAGE);  
         }
+        //Si ambos JComboBox contienen información, se asigna la muestra al investigador
         else{
             investigador = combo_investigador.getSelectedItem().toString();
             muestra = combo_muestra.getSelectedItem().toString();
@@ -370,36 +386,26 @@ public class Administrador extends javax.swing.JFrame {
         
     }//GEN-LAST:event_asignar_btnActionPerformed
 
+    //Método que captura el evento del botón Cargar del apartado de: Investigadores
+    private void cargar_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cargar_btnActionPerformed
+        //Se crea un objeto de tipo Cargar_Investigador para utilizar los métodos para leer archivos
+        Cargar_Investigador cargar = new Cargar_Investigador();
+        if(cargar.cargarCSV()==1) { //Si se cumple esta condición, el usuario ingresó sí seleccionó un archivo
+            try {
+                cargar.cargarAlArray(cargar.ruta);
+            } catch (IOException ex) {
+                Logger.getLogger(Administrador.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+        }
+        
+    }//GEN-LAST:event_cargar_btnActionPerformed
+
     /**
      * @param args the command line arguments
      */
     public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        System.out.println(dtm1.getRowCount());
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Administrador.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Administrador.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Administrador.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Administrador.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-        
-        
-        
+
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {

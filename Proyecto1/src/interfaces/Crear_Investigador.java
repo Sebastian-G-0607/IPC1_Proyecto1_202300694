@@ -40,7 +40,7 @@ public class Crear_Investigador extends javax.swing.JFrame {
         label_nombre = new javax.swing.JLabel();
         label_genero = new javax.swing.JLabel();
         label_contrasenia = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
+        crear_btn = new javax.swing.JButton();
         field_codigo = new javax.swing.JTextField();
         field_nombre = new javax.swing.JTextField();
         field_genero = new javax.swing.JTextField();
@@ -56,10 +56,10 @@ public class Crear_Investigador extends javax.swing.JFrame {
 
         label_contrasenia.setText("Contraseña:");
 
-        jButton1.setText("CREAR");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        crear_btn.setText("CREAR");
+        crear_btn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                crear_btnActionPerformed(evt);
             }
         });
 
@@ -94,7 +94,7 @@ public class Crear_Investigador extends javax.swing.JFrame {
                                     .addComponent(field_codigo)))))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(181, 181, 181)
-                        .addComponent(jButton1)))
+                        .addComponent(crear_btn)))
                 .addContainerGap(43, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -117,14 +117,14 @@ public class Crear_Investigador extends javax.swing.JFrame {
                     .addComponent(label_contrasenia)
                     .addComponent(field_contra, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 34, Short.MAX_VALUE)
-                .addComponent(jButton1)
+                .addComponent(crear_btn)
                 .addGap(31, 31, 31))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void crear_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_crear_btnActionPerformed
         String codigo, nombre, contrasenia;
         char genero = '\u0000';
         Investigador investigador = new Investigador();
@@ -166,7 +166,7 @@ public class Crear_Investigador extends javax.swing.JFrame {
             
             dispose();
         }
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_crear_btnActionPerformed
 
     private void field_codigoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_field_codigoActionPerformed
         // TODO add your handling code here:
@@ -209,11 +209,11 @@ public class Crear_Investigador extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton crear_btn;
     private javax.swing.JTextField field_codigo;
     private javax.swing.JTextField field_contra;
     private javax.swing.JTextField field_genero;
     private javax.swing.JTextField field_nombre;
-    private javax.swing.JButton jButton1;
     private javax.swing.JLabel label_codigo;
     private javax.swing.JLabel label_contrasenia;
     private javax.swing.JLabel label_genero;
