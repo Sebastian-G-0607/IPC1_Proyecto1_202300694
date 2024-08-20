@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package clases;
 
 import java.awt.Component;
@@ -13,6 +9,8 @@ import javax.swing.table.DefaultTableCellRenderer;
  *
  * @author sebas
  */
+
+//Clase para poder crear tablas con botones
 public class RenderTabla extends DefaultTableCellRenderer{
     
     @Override
@@ -21,7 +19,7 @@ public class RenderTabla extends DefaultTableCellRenderer{
             JButton boton = (JButton)value;
             return boton;
         }
-        return super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/OverriddenMethodBody
+        return super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column); 
     }
     
 }

@@ -124,6 +124,10 @@
     <Component class="javax.swing.JTextField" name="field_nombre">
     </Component>
     <Component class="javax.swing.JTextField" name="field_genero">
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="field_generoActionPerformed"/>
+        <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="field_generoKeyTyped"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JTextField" name="field_contra">
     </Component>

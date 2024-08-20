@@ -16,18 +16,14 @@ public class Login extends javax.swing.JFrame {
     private String user = "";
     private String password = "";
 
-    /**
-     * Creates new form Login
-     */
+    //Creacion del constructor Login
     public Login() {
         
         initComponents();
         setSize(600, 400);
-        setResizable(false);
+        setResizable(false); //Hacer que el tamaño de la interfaz no sea modificable
         setTitle("Inicio de sesión");
-        setLocationRelativeTo(null);
-        
-        
+        setLocationRelativeTo(null); //Centrar en la pantalla la interfaz
         
     }
 
@@ -183,21 +179,19 @@ public class Login extends javax.swing.JFrame {
         
         //Si el usuario ingresa "admin" como usuario y contraseña, se desplegará el modulo de administrador
         else if(user.equals("admin") && password.equals("admin")){
-            dispose();
+            dispose(); //Se cierra la interfaz LOGIN
             new Administrador().setVisible(true);
         }
         
         //Condición si el usuario ingresa un usuarioa y contraseña de un investigador válido
         else if(Leer_contrasenias.leer_contrasenias(user, password, Escribir_investigador.investigadores) == true){
-            dispose();
+            dispose(); //Se cierra la interfaz LOGIN
             new Investigador().setVisible(true);
         }
         
         //Si no se cumple ninguna condición anterior, significa que ni el usuario ni la contraseña son válidos. Se ejecuta la siguiente instrucción.
         else{
             JOptionPane.showMessageDialog(null, "No se encontraron coincidencias, ingrese un usuario y contraseña válidos", "Error al iniciar sesión", JOptionPane.ERROR_MESSAGE);
-            log_user.setText("");
-            log_password.setText("");
         }
     }//GEN-LAST:event_label_botonMouseClicked
 

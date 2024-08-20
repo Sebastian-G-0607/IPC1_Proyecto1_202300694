@@ -12,18 +12,20 @@ import java.io.Serializable;
  */
 public class Investigador implements Serializable{
     
+    private static final long serialVersionUID = 5153974495133292290L;
+                                                 
     private String codigo;
     private String nombre;
     private char genero;
     private int numExperimentos;
-    private Muestras muestra_asignada;
+    private Muestra muestra_asignada;
     private String contrasenia;
     
     public Investigador(){
         
     }
     
-    public Investigador(String codigo, String nombre, char genero, int numExperimentos, Muestras muestra_asignada){
+    public Investigador(String codigo, String nombre, char genero, int numExperimentos, Muestra muestra_asignada){
         this.codigo = codigo;
         this.nombre = nombre;
         this.genero = genero;
@@ -97,14 +99,14 @@ public class Investigador implements Serializable{
     /**
      * @return the muestra_asignada
      */
-    public Muestras getMuestra_asignada() {
+    public Muestra getMuestra_asignada() {
         return muestra_asignada;
     }
 
     /**
      * @param muestra_asignada the muestra_asignada to set
      */
-    public void setMuestra_asignada(Muestras muestra_asignada) {
+    public void setMuestra_asignada(Muestra muestra_asignada) {
         this.muestra_asignada = muestra_asignada;
     }
 

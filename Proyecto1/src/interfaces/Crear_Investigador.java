@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
 package interfaces;
 
 //Importando librerías 
@@ -11,15 +7,10 @@ import clases.Escribir_investigador;
 import clases.Investigador;
 import javax.swing.JOptionPane;
 
-/**
- *
- * @author sebas
- */
+/* @author sebas */
 public class Crear_Investigador extends javax.swing.JFrame {
 
-    /**
-     * Creates new form NuevoInvestigador
-     */
+    /* Creates new form NuevoInvestigador */
     public Crear_Investigador() {
         initComponents();
         setTitle("Crear Investigador");
@@ -66,6 +57,17 @@ public class Crear_Investigador extends javax.swing.JFrame {
         field_codigo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 field_codigoActionPerformed(evt);
+            }
+        });
+
+        field_genero.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                field_generoActionPerformed(evt);
+            }
+        });
+        field_genero.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                field_generoKeyTyped(evt);
             }
         });
 
@@ -124,7 +126,10 @@ public class Crear_Investigador extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    //Método que captura el evento del botón crear
     private void crear_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_crear_btnActionPerformed
+        
+        //Variables auxiliares
         String codigo, nombre, contrasenia;
         char genero = '\u0000';
         Investigador investigador = new Investigador();
@@ -133,22 +138,26 @@ public class Crear_Investigador extends javax.swing.JFrame {
         nombre = field_nombre.getText();
         contrasenia = field_contra.getText();
         
-        if(!field_genero.getText().equals("")){
+        if(!field_genero.getText().equals("")){ //Si el género no está vacío, se ejecuta el siguiente bloque
             genero = field_genero.getText().charAt(0);
             genero = Character.toUpperCase(genero);
         }
         
+        //Si el usuario no ingresa todos los datos, se ejecuta el siguiente bloque:
         if(codigo.equals("") || nombre.equals("") || contrasenia.equals("") || genero == '\u0000'){
             JOptionPane.showMessageDialog(null,"Ingrese todos los campos", "Error al crear el investigador", JOptionPane.WARNING_MESSAGE);
         }
+        //Si el usuario ingresa un género distinto de F o M, se ejecuta el siguente bloque
         else if(genero != 'M' && genero != 'F' ){
             JOptionPane.showMessageDialog(null, "Ingrese un género válido", "Error al crear el investigador", JOptionPane.WARNING_MESSAGE);
         }
+        //Si el código que ingresó el usuario ya existe en el registro, se ejecuta el siguiente bloque
         else if(!Escribir_investigador.investigadores.isEmpty() && Escribir_investigador.comparar_codigo(codigo) == true){
             JOptionPane.showMessageDialog(null,"El código que ingresó ya existe, ingrese uno válido");
         }
+        //Si ninguna condición anterior se cumple, los datos ingresados son correctos y se ejecuta el siguiente bloque
         else{
-            
+            //Se asignan los valores ingresados en los JTextField al investigador temporal
             investigador.setCodigo(codigo);
             investigador.setNombre(nombre);
             investigador.setGenero(genero);
@@ -156,10 +165,13 @@ public class Crear_Investigador extends javax.swing.JFrame {
             investigador.setNumExperimentos(0);
             investigador.setMuestra_asignada(null);
             
+            //Se agrega el investigador temporal a la lista
             Escribir_investigador.investigadores.add(investigador);
             Escribir_InvestigadorBinario.escribir_investigadorbin();
             
+            //Se agrega el investigador a la tabla
             Actualizar_Tabla.nuevo_elemento(Administrador.dtm1, Escribir_investigador.investigadores);
+            //Se agrega el investigador al JComboBox de investigadores de la pestaña de asignar muestras
             Escribir_investigador.Escribir_investigadorCombo(Administrador.combo_investigador, Escribir_investigador.investigadores);
             
             JOptionPane.showMessageDialog(null,"Investigador ingresado correctamente");
@@ -171,6 +183,25 @@ public class Crear_Investigador extends javax.swing.JFrame {
     private void field_codigoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_field_codigoActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_field_codigoActionPerformed
+
+    private void field_generoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_field_generoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_field_generoActionPerformed
+
+    //Método para que en el género solo se pueda ingresar M o F y únicamente un caracter
+    private void field_generoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_field_generoKeyTyped
+        int key = evt.getKeyChar();
+        
+        boolean genero = (key == 70) || (key == 77) || (key == 102)  || (key == 109); //Se valida que genero sea M o F, en mayuscula o minuscula
+        
+        if(!genero){ //Si no se ingresa un género válido (M o F) se elimina el caracter
+            evt.consume();
+        }
+        
+        if(field_genero.getText().trim().length() == 1){ //Si ya se ingresó un caracter, no se pueden ingresar más
+            evt.consume();
+        }
+    }//GEN-LAST:event_field_generoKeyTyped
 
     /**
      * @param args the command line arguments

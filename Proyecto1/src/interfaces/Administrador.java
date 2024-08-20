@@ -7,7 +7,7 @@ import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import clases.RenderTabla;
-import clases.Cargar_Investigador;
+import clases.Cargar_csv;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -18,55 +18,48 @@ import java.util.logging.Logger;
  */
 public class Administrador extends javax.swing.JFrame {
 
-    /**
-     * Creates new form Administrador
-     */
-    
-    //Se crea un dtm para agregar y actualizar datos de la tabla
+    //Se crea un dtm estático para agregar y actualizar datos de la tabla
     public static DefaultTableModel dtm1 = new DefaultTableModel();
-    
-    //public static DefaultTableModel dtm_muestras = new DefaultTableModel();
-    
+    public static DefaultTableModel dtm_muestras;
+
     //Creación del botón VER de la tabla de muestras
     JButton ver = new JButton("VER");
-    
-    
+
+    //Creación del constructor Administrador
     public Administrador() {
-        
+
         initComponents();
         setSize(800, 500);
         setTitle("Módulo de Administrador");
         setResizable(false);
         setLocationRelativeTo(null);
-        
+
         //Encabezados de las columnas de la tabla Investigadores
         String id[] = {"Código", "Nombre", "Genero", "Experimentos"};
-        dtm1.setColumnIdentifiers(id);
-        //Se asigna el dtm1 a la tabla_investigadores
-        tabla_investigadores.setModel(dtm1);
-        
+        dtm1.setColumnIdentifiers(id); //Se agrega el vector id al encabezado de la tabla como títulos
+        tabla_investigadores.setModel(dtm1); //Se asigna el dtm1 a la tabla_investigadores
+
         //Se crea la tabla que contiene las muestras
         tabla_muestras();
-        
+
         //Se lee el arraylist y se agregan los elementos al JTable, si no hay elementos no se realiza ninguna acción
-        if(Escribir_investigador.investigadores != null || Escribir_investigador.investigadores.size() != 0){
-            for(Investigador investigador_temp:Escribir_investigador.investigadores){
-                dtm1.addRow(new Object[]{investigador_temp.getCodigo(),investigador_temp.getNombre(), investigador_temp.getGenero(), investigador_temp.getNumExperimentos()});
-                combo_investigador.addItem(investigador_temp.getNombre());
+        if (Escribir_investigador.investigadores != null || Escribir_investigador.investigadores.size() != 0) {
+            for (Investigador investigador_temp : Escribir_investigador.investigadores) {
+                dtm1.addRow(new Object[]{investigador_temp.getCodigo(), investigador_temp.getNombre(), investigador_temp.getGenero(), investigador_temp.getNumExperimentos()}); //Se agrega el elemento a la tabla de Investigadores
+                combo_investigador.addItem(investigador_temp.getNombre()); //Se agrega el elemento al JComboBox que está en la pestaña de Asignar Muestra
             }
         }
-        
+
     }
-    
+
     //Función para crear la tabla que contiene las muestras, especial porque se crea un botón en la última columna.
-    public void tabla_muestras(){
+    public void tabla_muestras() {
         tabla_muestras.setDefaultRenderer(Object.class, new RenderTabla());
-        //DefaultTableModel dtm_muestras = new DefaultTableModel(new Object[][]{{"agadg", "ags","ag",ver},{"gadg","gad","fad",ver}}, new Object[]{"Código", "Descripción", "Estado", "Acciones"});
-        DefaultTableModel dtm_muestras = new DefaultTableModel();
+        dtm_muestras = new DefaultTableModel();
         String[] id = {"Código", "Descripción", "Estado", "Acciones"};
-        dtm_muestras.setColumnIdentifiers(id);
-        tabla_muestras.setModel(dtm_muestras);
-        tabla_muestras.setRowHeight(30);
+        dtm_muestras.setColumnIdentifiers(id); //Se agrega el vector id al encabezado de la tabla de muestras como títulos
+        tabla_muestras.setModel(dtm_muestras); //A la tabla muestras se le asigna el modelo que se definió arriba
+        tabla_muestras.setRowHeight(30); //Se ajusta el alto de la fila
     }
 
     /**
@@ -347,7 +340,7 @@ public class Administrador extends javax.swing.JFrame {
 
     //Método que captura el evento del botón crear
     private void crear_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_crear_btnActionPerformed
-        new Crear_Investigador().setVisible(true);                
+        new Crear_Investigador().setVisible(true);
     }//GEN-LAST:event_crear_btnActionPerformed
 
     //Método que captura el evento del botón actualizar
@@ -361,7 +354,7 @@ public class Administrador extends javax.swing.JFrame {
     }//GEN-LAST:event_eliminar_btnActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
+        new Crear_muestra().setVisible(true);
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void combo_investigadorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_combo_investigadorActionPerformed
@@ -370,35 +363,37 @@ public class Administrador extends javax.swing.JFrame {
 
     //Método para capturar el evento del botón asignar perteneciente al apartado: Asignación de experimentos.
     private void asignar_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_asignar_btnActionPerformed
+        
+        //Strings auxiliares
         String investigador;
         String muestra;
-        
+
         //Si alguno de los JComboBox no fue seleccionado, se despliega un mensaje de error
-        if(combo_investigador.getSelectedItem() == null || combo_muestra.getSelectedItem() == null){
-          JOptionPane.showMessageDialog(null, "Error en la asignación", "Error", JOptionPane.ERROR_MESSAGE);  
+        if (combo_investigador.getSelectedItem() == null || combo_muestra.getSelectedItem() == null) {
+            JOptionPane.showMessageDialog(null, "Error en la asignación", "Error", JOptionPane.ERROR_MESSAGE);
         }
         //Si ambos JComboBox contienen información, se asigna la muestra al investigador
-        else{
+        else {
             investigador = combo_investigador.getSelectedItem().toString();
             muestra = combo_muestra.getSelectedItem().toString();
         }
-        
-        
+
+
     }//GEN-LAST:event_asignar_btnActionPerformed
 
     //Método que captura el evento del botón Cargar del apartado de: Investigadores
     private void cargar_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cargar_btnActionPerformed
-        //Se crea un objeto de tipo Cargar_Investigador para utilizar los métodos para leer archivos
-        Cargar_Investigador cargar = new Cargar_Investigador();
-        if(cargar.cargarCSV()==1) { //Si se cumple esta condición, el usuario ingresó sí seleccionó un archivo
+        //Se crea un objeto de tipo Cargar_csv para utilizar los métodos para leer archivos
+        Cargar_csv cargar = new Cargar_csv();
+        if (cargar.cargarCSV() == 1) { //Si se cumple esta condición, el usuario ingresó sí seleccionó un archivo
             try {
-                cargar.cargarAlArray(cargar.ruta);
+                cargar.cargarAlArray(cargar.ruta); //Se utiliza el método para cargar los investigadores del csv al array y luego grabarlos en el archivo binario
             } catch (IOException ex) {
                 Logger.getLogger(Administrador.class.getName()).log(Level.SEVERE, null, ex);
             }
 
         }
-        
+
     }//GEN-LAST:event_cargar_btnActionPerformed
 
     /**

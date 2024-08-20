@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
 package interfaces;
 
 import clases.Actualizar_Tabla;
@@ -15,9 +11,7 @@ import javax.swing.JOptionPane;
  */
 public class Eliminar_Investigador extends javax.swing.JFrame {
 
-    /**
-     * Creates new form Eliminar_Investigador
-     */
+    /* Creates new form Eliminar_Investigador*/
     public Eliminar_Investigador() {
         initComponents();
         setLocationRelativeTo(null);
@@ -79,26 +73,29 @@ public class Eliminar_Investigador extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    //Método que captura el evento de elminar un investigador
     private void eliminar_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_eliminar_btnActionPerformed
         String codigo, nombre;
         codigo = field_codigo.getText();
         int index = -1;
         int longitud = Escribir_investigador.investigadores.size();
+        
+        //Se crea un bucle que recorra el ArrayList y que compare el código ingresado con los existentes en el array
         for(int i=0; i<longitud; i++){
             if(codigo.equals(Escribir_investigador.investigadores.get(i).getCodigo())){
-                index = i;
+                index = i; //Si se encuentran coincidencias, se guarda el índice de la posición del Investigador
             }
         }
-        if(index == -1){
+        if(index == -1){ //Si no se encontraron coincidencias
             JOptionPane.showMessageDialog(null, "No se encontraron coincidencias de código");
         }
-        else{
-            nombre = Escribir_investigador.investigadores.get(index).getNombre();
+        else{ //Si se econtraron coincidencias, se ejecuta el siguiente bloque de código
+            nombre = Escribir_investigador.investigadores.get(index).getNombre(); 
             Escribir_investigador.investigadores.remove(index);
             JOptionPane.showMessageDialog(null,"Se eliminó el investigador " + codigo + " - " + nombre);
-            Actualizar_Tabla.eliminar_elemento(Administrador.dtm1, index);
-            Escribir_InvestigadorBinario.escribir_investigadorbin();
-            Escribir_investigador.Escribir_investigadorCombo(Administrador.combo_investigador, Escribir_investigador.investigadores);
+            Actualizar_Tabla.eliminar_elemento(Administrador.dtm1, index); //Se elimina el registro de la tabla
+            Escribir_InvestigadorBinario.escribir_investigadorbin(); //Se sobreescribe el binario con el nuevo arrayList
+            Escribir_investigador.Escribir_investigadorCombo(Administrador.combo_investigador, Escribir_investigador.investigadores); //Se actualiza el JComboBox de investigadores
         }
         
         
