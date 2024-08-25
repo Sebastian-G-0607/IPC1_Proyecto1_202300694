@@ -1,13 +1,15 @@
 package clases;
 
+import java.io.Serializable;
+
 /* @author sebas */
-public class Muestra {
+public class Muestra implements Serializable{
 
     //Atributos que tendrá un objeto de tipo Muestra
     private String codigo;
     private String descripcion;
     private int[][] patron;
-    private String estado;
+    private String estado; //Los estados posibles son: "Ingreso", "En proceso" y "Procesado"
     
     //Constructor para una muestra
 

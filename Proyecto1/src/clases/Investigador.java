@@ -17,7 +17,7 @@ public class Investigador implements Serializable{
     private String codigo;
     private String nombre;
     private char genero;
-    private int numExperimentos;
+    private int numExperimentos = 0;
     private Muestra muestra_asignada;
     private String contrasenia;
     

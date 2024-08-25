@@ -23,18 +23,18 @@ public class Cargar_csv {
     
     //Método para seleccionar el archivo desde el JFileChooser
     public int cargarCSV() { 
-        int band = 0;
-        JFileChooser selArchivo = new JFileChooser("C:\\Users\\sebas\\OneDrive\\Escritorio");
-        int val = selArchivo.showOpenDialog(null);
-        if(val != selArchivo.CANCEL_OPTION){
+        int band = 0; //Bandera para saber si el usuario cargó un archivo
+        JFileChooser selArchivo = new JFileChooser("C:\\Users\\sebas\\OneDrive\\Escritorio"); //Abrir un JFileChooser desde la dirección específicada
+        int val = selArchivo.showOpenDialog(null); //Se muestra la interfaz
+        if(val != selArchivo.CANCEL_OPTION){ //Si el usuario no cerró el JFileChooser:
             ruta = selArchivo.getSelectedFile().getAbsolutePath(); 
 //            ruta_archivo = selArchivo.getSelectedFile(); 
 //            System.out.println(ruta); 
-            band = 1;
-            return band;
+            band = 1; //Se cambia la bandera a 1
+            return band; //se retorna band
         }
         else {
-            return band;
+            return band; //Se retorna band como false
         }
     }
     
@@ -64,6 +64,7 @@ public class Cargar_csv {
                 
     }
     
+    //Método para cargar la matriz del csv a una matriz int[][]
     public int[][] cargarMuestra(String rutaArchivo) throws IOException{
         
         int[][] matrix = null;
@@ -75,8 +76,8 @@ public class Cargar_csv {
 //            System.out.println(extension);
             
             if(extension.equals("csv")){ //Si la extensión es csv, el archivo se puede leer
-               Leer_csv lector = new Leer_csv();
-               matrix = lector.leer_patronNuevaMuestra(rutaArchivo);
+               Leer_csv lector = new Leer_csv(); // Se instancia un objeto de la clase Leer_csv para leer la matriz del csv
+               matrix = lector.leer_patronNuevaMuestra(rutaArchivo); //Se iguala la variable local matrix a la matriz que retorna la el método leer_patronNuevaMuestra
             }
             else{
                 JOptionPane.showMessageDialog(null,"El tipo de archivo no es válido", "Error", JOptionPane.ERROR_MESSAGE);

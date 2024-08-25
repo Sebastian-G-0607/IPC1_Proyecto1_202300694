@@ -3,7 +3,10 @@ package interfaces;
  //Importando las librerías que escriben el arraylist y el binario:
 import clases.Escribir_InvestigadorBinario;
 import clases.Escribir_investigador;
+import clases.Escribir_muestraBinaria;
+import clases.Escribir_patronBinario;
 import clases.Leer_contrasenias;
+import java.io.IOException;
 import javax.swing.JOptionPane;
 
 /**
@@ -15,16 +18,17 @@ public class Login extends javax.swing.JFrame {
     //Variables que almacenarán los datos del JTextField
     private String user = "";
     private String password = "";
+    public static int indexInvestigador;
 
     //Creacion del constructor Login
     public Login() {
         
         initComponents();
-        setSize(600, 400);
+        setSize(600, 400); //Tamaño del JFrame
         setResizable(false); //Hacer que el tamaño de la interfaz no sea modificable
-        setTitle("Inicio de sesión");
+        setTitle("Inicio de sesión"); //Título del JFrame
         setLocationRelativeTo(null); //Centrar en la pantalla la interfaz
-        
+
     }
 
     /**
@@ -183,10 +187,11 @@ public class Login extends javax.swing.JFrame {
             new Administrador().setVisible(true);
         }
         
-        //Condición si el usuario ingresa un usuarioa y contraseña de un investigador válido
-        else if(Leer_contrasenias.leer_contrasenias(user, password, Escribir_investigador.investigadores) == true){
+        //Condición si el usuario ingresa un usuario y contraseña de un investigador válido
+        else if(Leer_contrasenias.leer_contrasenias(user, password, Escribir_investigador.investigadores) != -1){
             dispose(); //Se cierra la interfaz LOGIN
-            new Investigador().setVisible(true);
+            indexInvestigador = Leer_contrasenias.leer_contrasenias(user, password, Escribir_investigador.investigadores);
+            new Investigador().setVisible(true); //Se instancia un objeto de tipo Investigador y se hace visible
         }
         
         //Si no se cumple ninguna condición anterior, significa que ni el usuario ni la contraseña son válidos. Se ejecuta la siguiente instrucción.
@@ -198,7 +203,7 @@ public class Login extends javax.swing.JFrame {
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[]) {
+    public static void main(String args[]) throws IOException, ClassNotFoundException {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
@@ -222,8 +227,16 @@ public class Login extends javax.swing.JFrame {
         }
         //</editor-fold>
         
-        //Al iniciar el programa, se leeaaadn los objetos de tipo Investigador del archivo binario y se agreguen al arraylist
-        Escribir_InvestigadorBinario.leer_investigadorbin();
+        //Al iniciar el programa, se leen los objetos de tipo Investigador del archivo binario y se agreguen al arraylist
+        Escribir_InvestigadorBinario lectorInvestigador = new Escribir_InvestigadorBinario();
+        lectorInvestigador.leer_investigadorbin();
+        
+        //Al iniciar el programa, se leen los objetos de tipo Muestra del archivo binario y se agreguen al arraylist
+        Escribir_muestraBinaria lectorMuestra = new Escribir_muestraBinaria();
+        lectorMuestra.leer_muestrabin();
+        
+        Escribir_patronBinario lectorPatron = new Escribir_patronBinario();
+        lectorPatron.leer_patronbin();
         
         
         /* Create and display the form */
@@ -248,4 +261,5 @@ public class Login extends javax.swing.JFrame {
     private javax.swing.JTextField log_user;
     private javax.swing.JPanel panel_verde;
     // End of variables declaration//GEN-END:variables
+
 }

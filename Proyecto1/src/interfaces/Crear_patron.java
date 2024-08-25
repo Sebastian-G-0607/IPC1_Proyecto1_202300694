@@ -8,26 +8,28 @@ import clases.Actualizar_Tabla;
 import clases.Cargar_csv;
 import clases.Escribir_muestra;
 import clases.Escribir_muestraBinaria;
+import clases.Escribir_patron;
 import clases.Escribir_patronBinario;
 import clases.Muestra;
+import clases.Patron;
 import java.io.IOException;
 import javax.swing.JOptionPane;
-import javax.swing.text.html.HTMLDocument;
 
 /**
 
  @author sebas
  */
-public class Crear_muestra extends javax.swing.JFrame {
+public class Crear_patron extends javax.swing.JFrame {
     
-    int[][] patron_muestra = null;
+    //Se crea una matriz que almacenará temporalmente la matriz del patrón
+    int[][] patron = null;
 
-    /** Creates new form Crear_muestra */
-    public Crear_muestra() {
+    /** Creates new form Crear_patron */
+    public Crear_patron() {
         initComponents();
-        setTitle("Crear Muestra");
-        setLocationRelativeTo(null);
+        setTitle("Crear Patrón");
         setResizable(false);
+        setLocationRelativeTo(null);
     }
 
     /** This method is called from within the constructor to
@@ -39,21 +41,28 @@ public class Crear_muestra extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        label_codigo = new javax.swing.JLabel();
-        label_descripcion = new javax.swing.JLabel();
-        label_patron = new javax.swing.JLabel();
-        crear_btn = new javax.swing.JButton();
-        cargar_btn = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
         field_codigo = new javax.swing.JTextField();
-        field_descripcion = new javax.swing.JTextField();
+        field_nombre = new javax.swing.JTextField();
+        cargar_btn = new javax.swing.JButton();
+        crear_btn = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
-        label_codigo.setText("Código: ");
+        jLabel1.setText("Código: ");
 
-        label_descripcion.setText("Descripción:");
+        jLabel2.setText("Nombre:");
 
-        label_patron.setText("Patrón:");
+        jLabel3.setText("Patrón: ");
+
+        cargar_btn.setText("CARGAR PATRON");
+        cargar_btn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cargar_btnActionPerformed(evt);
+            }
+        });
 
         crear_btn.setText("CREAR");
         crear_btn.addActionListener(new java.awt.event.ActionListener() {
@@ -62,56 +71,43 @@ public class Crear_muestra extends javax.swing.JFrame {
             }
         });
 
-        cargar_btn.setText("CARGAR PATRÓN");
-        cargar_btn.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cargar_btnActionPerformed(evt);
-            }
-        });
-
-        field_codigo.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                field_codigoActionPerformed(evt);
-            }
-        });
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(34, 34, 34)
+                .addGap(42, 42, 42)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(label_patron)
-                    .addComponent(label_codigo)
-                    .addComponent(label_descripcion))
-                .addGap(22, 22, 22)
+                    .addComponent(jLabel1)
+                    .addComponent(jLabel2)
+                    .addComponent(jLabel3))
+                .addGap(34, 34, 34)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(field_descripcion)
                     .addComponent(field_codigo)
-                    .addComponent(cargar_btn, javax.swing.GroupLayout.DEFAULT_SIZE, 280, Short.MAX_VALUE))
+                    .addComponent(field_nombre)
+                    .addComponent(cargar_btn, javax.swing.GroupLayout.DEFAULT_SIZE, 285, Short.MAX_VALUE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(191, Short.MAX_VALUE)
+                .addContainerGap(192, Short.MAX_VALUE)
                 .addComponent(crear_btn)
-                .addGap(187, 187, 187))
+                .addGap(186, 186, 186))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(38, 38, 38)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(label_codigo)
-                    .addComponent(field_codigo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(43, 43, 43)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(label_descripcion)
-                    .addComponent(field_descripcion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(37, 37, 37)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(label_patron)
-                    .addComponent(cargar_btn))
+                    .addComponent(jLabel1)
+                    .addComponent(field_codigo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(39, 39, 39)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel2)
+                    .addComponent(field_nombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(45, 45, 45)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel3)
+                    .addComponent(cargar_btn))
+                .addGap(42, 42, 42)
                 .addComponent(crear_btn)
                 .addContainerGap(47, Short.MAX_VALUE))
         );
@@ -119,58 +115,59 @@ public class Crear_muestra extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void field_codigoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_field_codigoActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_field_codigoActionPerformed
-
-    private void crear_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_crear_btnActionPerformed
-        //Se crean strings que almacenan los textos de los JTextField
-        String codigo;
-        String descripcion;
-        
-        Muestra muestraTemp = new Muestra(); //Se crea un objeto Muestra temporal que almacena los dsatos del formulario
-        
-        codigo = field_codigo.getText(); //Se guarda el código introducido en el String codigo
-        descripcion = field_descripcion.getText(); //Se guarda la descripción introducida en el JTextField en el String descripcion
-        
-        //Si alguno de los campos está vacío o no se ha cargado una matriz, se muestra un mensaje de error
-        if(codigo.equals("") || descripcion.equals("") || patron_muestra == null){
-            JOptionPane.showMessageDialog(null, "Debe completar todos los campos", "Error", JOptionPane.ERROR_MESSAGE); //Mensaje de error
-        }
-        else if(Escribir_muestra.comparar_codigo(codigo)){ //Se invoca el método comparar_codigo() de la clase Escribir_muestra, si este es True, significa que el código ya existe
-            JOptionPane.showMessageDialog(null, "El código que ingresó ya existe en el sistema", "Error", JOptionPane.ERROR_MESSAGE);
-        }
-        else{ //Si no se cumple ninguna condición anterior, los datos se almacenarán en el sistema
-            
-            //En el Objeto de tipo Muestra se guardan los atributos ingresados
-            muestraTemp.setCodigo(codigo);
-            muestraTemp.setDescripcion(descripcion);
-            muestraTemp.setPatron(patron_muestra); //La matriz del csv se guardó previamente en una matriz que se declaró como variable global en esta clase
-            muestraTemp.setEstado("Ingreso");
-            
-            Escribir_muestra.muestras.add(muestraTemp); //La muestra temporal se ingresa en el ArrayList
-
-            
-            Escribir_patronBinario.escribir_patronbin(); //Se escribe el Array de patrones en el archivo binario
-            Actualizar_Tabla.nueva_muestra(Administrador.dtm_patrones, Escribir_muestra.muestras, Administrador.ver); //Se actualiza la tabla de muestras
-            
-            JOptionPane.showMessageDialog(null, "Se ha introducido la muestra correctamente"); //Mensaje de agregado con éxito
-            patron_muestra = null; //Se limpia la variable patron_muestra para que se pueda ingresar otra muestra posteriormente
-            dispose(); //Se cierra el formulario
-        }
-        
-    }//GEN-LAST:event_crear_btnActionPerformed
-
     private void cargar_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cargar_btnActionPerformed
         Cargar_csv cargar = new Cargar_csv(); //Se instancia un objeto de la clase Cargar_csv
         if (cargar.cargarCSV() == 1) { //Si se cumple esta condición, el usuario sí seleccionó un archivo csv
             try {
-                patron_muestra = cargar.cargarMuestra(cargar.ruta); //
+                patron = cargar.cargarMuestra(cargar.ruta); //
             } catch (IOException ex) {
                 JOptionPane.showMessageDialog(null, ex);
             }
         }
     }//GEN-LAST:event_cargar_btnActionPerformed
+
+    private void crear_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_crear_btnActionPerformed
+        //Se crean strings que almacenan los textos de los JTextField
+        String codigo;
+        String nombre;
+        
+        Patron patronTemp = new Patron(); //Se crea un objeto Patron temporal que almacena los datos del formulario
+        
+        codigo = field_codigo.getText(); //Se guarda el código introducido en el String codigo
+        nombre = field_nombre.getText(); //Se guarda el nombre introducido en el JTextField en el String nombre
+        
+        //Si alguno de los campos está vacío o no se ha cargado una matriz, se muestra un mensaje de error
+        if(codigo.equals("") || nombre.equals("") || patron == null){
+            JOptionPane.showMessageDialog(null, "Debe completar todos los campos", "Error", JOptionPane.ERROR_MESSAGE); //Mensaje de error
+        }
+        else if(Escribir_patron.comparar_codigo(codigo)){ //Se invoca el método comparar_codigo() de la clase Escribir_patron, si este es True, significa que el código ya existe
+            JOptionPane.showMessageDialog(null, "El código que ingresó ya existe en el sistema", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+        else{ //Si no se cumple ninguna condición anterior, los datos se almacenarán en el sistema
+            
+            //En el Objeto de tipo Patron se guardan los atributos ingresados
+            patronTemp.setCodigo(codigo);
+            patronTemp.setNombre(nombre);
+            patronTemp.setPatron(patron); //La matriz del csv se guardó previamente en una matriz que se declaró como variable global en esta clase
+
+            
+            Escribir_patron.patrones.add(patronTemp); //El patron temporal se ingresa en el ArrayList
+            System.out.println("codigo: " + patronTemp.getCodigo() + " nombre: " + patronTemp.getNombre());
+            for(int i=0; i<3; i++){
+                for(int j=0; j<3; j++){
+                    System.out.print(patronTemp.getPatron()[i][j] + " ");
+                }
+                System.out.println("");
+            }
+            
+            Escribir_patronBinario.escribir_patronbin();//Se escribe el Array de patrones en el archivo binario
+            Actualizar_Tabla.nuevo_patron(Administrador.dtm_patrones, Escribir_patron.patrones, Administrador.ver); //Se actualiza la tabla de patrones
+            
+            JOptionPane.showMessageDialog(null, "Se ha introducido la muestra correctamente"); //Mensaje de agregado con éxito
+            patron = null; //Se limpia la variable patron para que se pueda ingresar otro patrón posteriormente
+            dispose(); //Se cierra el formulario
+        }
+    }//GEN-LAST:event_crear_btnActionPerformed
 
     /**
      @param args the command line arguments
@@ -189,20 +186,20 @@ public class Crear_muestra extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Crear_muestra.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Crear_patron.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Crear_muestra.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Crear_patron.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Crear_muestra.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Crear_patron.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Crear_muestra.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Crear_patron.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Crear_muestra().setVisible(true);
+                new Crear_patron().setVisible(true);
             }
         });
     }
@@ -211,9 +208,9 @@ public class Crear_muestra extends javax.swing.JFrame {
     private javax.swing.JButton cargar_btn;
     private javax.swing.JButton crear_btn;
     private javax.swing.JTextField field_codigo;
-    private javax.swing.JTextField field_descripcion;
-    private javax.swing.JLabel label_codigo;
-    private javax.swing.JLabel label_descripcion;
-    private javax.swing.JLabel label_patron;
+    private javax.swing.JTextField field_nombre;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     // End of variables declaration//GEN-END:variables
 }

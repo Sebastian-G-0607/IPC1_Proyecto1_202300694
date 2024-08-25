@@ -1,14 +1,13 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package clases;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -32,14 +31,13 @@ public class Escribir_InvestigadorBinario {
             oos.close();
             fos.close();
         } catch (Exception e) {
-            System.out.println("Error");
-            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, e.getMessage() , "Error", JOptionPane.ERROR_MESSAGE);
         }
         
     }
     
     //Método estático para leer el archivo binario cargar los elementos en el arraylist de tipo Investigador
-    public static void leer_investigadorbin(){
+    public void leer_investigadorbin() throws IOException, ClassNotFoundException{
         
         String nombreArchivo = "investigadores.bin";
         File archivo = new File(nombreArchivo);
@@ -53,11 +51,9 @@ public class Escribir_InvestigadorBinario {
             Escribir_investigador.investigadores.add(investigador_temp);
         }
 
-        } catch (Exception e) {
-            System.out.println("Error");
-            e.printStackTrace();
+        } catch (FileNotFoundException e) {
+            JOptionPane.showMessageDialog(null, "El sistema almacena los datos en " + e.getMessage() + ". Se creará un archivo para almacenar los datos", "Error", JOptionPane.ERROR_MESSAGE);
         }
-        
     }
     
 }
