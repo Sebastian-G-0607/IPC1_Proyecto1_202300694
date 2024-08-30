@@ -1,7 +1,19 @@
 package interfaces;
 
+import clases.Escribir_InvestigadorBinario;
 import javax.swing.JLabel;
 import clases.Escribir_investigador;
+import clases.Escribir_muestra;
+import clases.Escribir_muestraBinaria;
+import clases.Escribir_patron;
+import clases.Muestra;
+import clases.MuestraDeInvestigador;
+import clases.Patron;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import javax.swing.JOptionPane;
+import javax.swing.UIManager;
 
 /**
  *
@@ -18,11 +30,25 @@ public class Investigador extends javax.swing.JFrame {
     public Investigador() {
 
         initComponents();
-        System.out.println(indexInvestigador);
         setTitle("Módulo de Investigador");
         setLocationRelativeTo(null);
         setResizable(false);
         
+        //Comprueba si el ArrayList de muestras asignadas al investigador está vacío, si no está vacío, se agregan las muestras al JComboBox
+        if(!Escribir_investigador.investigadores.get(indexInvestigador).getMuestra_asignada().isEmpty()){
+            
+            
+            for(int i=0; i<Escribir_investigador.investigadores.get(indexInvestigador).getMuestra_asignada().size(); i++){
+                
+                //Se crea una copia temporal de la muestra en la posición i de la lista de muestras del investigador. Se debe realizar un casteo del objeto a tipo Muestra para conseguir los métodos de ese tipo de objetos
+                Muestra muestra_temp = (Muestra) Escribir_investigador.investigadores.get(indexInvestigador).getMuestra_asignada().get(i);
+                combo_muestra.addItem(muestra_temp.getDescripcion()); //Se agega la descripción de la muestra al JComboBox
+            }
+            
+        }
+        
+        //Se escriben todos los patrones en el JComboBox de patrones
+        Escribir_patron.Escribir_patronCombo(combo_patron, Escribir_patron.patrones);
         
     }
 
@@ -36,24 +62,32 @@ public class Investigador extends javax.swing.JFrame {
     private void initComponents() {
 
         jScrollBar1 = new javax.swing.JScrollBar();
-        jButton1 = new javax.swing.JButton();
+        cerrarS_btn = new javax.swing.JButton();
         label_investigador = new javax.swing.JLabel();
-        jTabbedPane4 = new javax.swing.JTabbedPane();
+        pestaña_analisis = new javax.swing.JTabbedPane();
         jPanel1 = new javax.swing.JPanel();
         label_analisis = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
+        label_muestra = new javax.swing.JLabel();
+        label_patron = new javax.swing.JLabel();
+        combo_patron = new javax.swing.JComboBox<>();
+        combo_muestra = new javax.swing.JComboBox<>();
+        analizar_btn = new javax.swing.JButton();
+        laber_resultados = new javax.swing.JLabel();
+        label_txtResultados = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jTable1 = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jButton1.setText("Cerrar Sesión");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        cerrarS_btn.setText("Cerrar Sesión");
+        cerrarS_btn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                cerrarS_btnActionPerformed(evt);
             }
         });
-        getContentPane().add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(667, 25, -1, -1));
+        getContentPane().add(cerrarS_btn, new org.netbeans.lib.awtextra.AbsoluteConstraints(667, 25, -1, -1));
 
         label_investigador.setFont(new java.awt.Font("Yu Gothic UI Light", 0, 24)); // NOI18N
         label_investigador.setText("Investigador " + Escribir_investigador.investigadores.get(indexInvestigador).getCodigo() + " - " + Escribir_investigador.investigadores.get(indexInvestigador).getNombre());
@@ -62,54 +96,233 @@ public class Investigador extends javax.swing.JFrame {
         label_analisis.setFont(new java.awt.Font("Yu Gothic UI Semilight", 0, 24)); // NOI18N
         label_analisis.setText("Análisis de Experimentos");
 
-        jLabel2.setText("jLabel2");
+        label_muestra.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        label_muestra.setText("Muestra");
+
+        label_patron.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        label_patron.setText("Patrón a analizar");
+
+        combo_patron.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] {}));
+
+        combo_muestra.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] {}));
+        combo_muestra.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                combo_muestraActionPerformed(evt);
+            }
+        });
+
+        analizar_btn.setText("ANALIZAR");
+        analizar_btn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                analizar_btnActionPerformed(evt);
+            }
+        });
+
+        laber_resultados.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        laber_resultados.setText("Resultados:");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(278, Short.MAX_VALUE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(label_analisis)
                 .addGap(268, 268, 268))
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(79, 79, 79)
-                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(100, 100, 100)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(label_patron)
+                                    .addComponent(label_muestra))
+                                .addGap(42, 42, 42)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(combo_patron, javax.swing.GroupLayout.PREFERRED_SIZE, 375, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(combo_muestra, javax.swing.GroupLayout.PREFERRED_SIZE, 375, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(laber_resultados)
+                                .addGap(46, 46, 46)
+                                .addComponent(label_txtResultados, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(346, 346, 346)
+                        .addComponent(analizar_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(147, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(30, 30, 30)
                 .addComponent(label_analisis)
-                .addGap(27, 27, 27)
-                .addComponent(jLabel2)
-                .addContainerGap(270, Short.MAX_VALUE))
+                .addGap(32, 32, 32)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(label_muestra)
+                    .addComponent(combo_muestra, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(41, 41, 41)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(label_patron)
+                    .addComponent(combo_patron, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 54, Short.MAX_VALUE)
+                .addComponent(analizar_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(16, 16, 16)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(laber_resultados)
+                    .addComponent(label_txtResultados, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(53, 53, 53))
         );
 
-        jTabbedPane4.addTab("Análisis", jPanel1);
+        pestaña_analisis.addTab("Análisis", jPanel1);
+
+        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane1.setViewportView(jTable1);
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 800, Short.MAX_VALUE)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGap(37, 37, 37)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 730, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(33, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 375, Short.MAX_VALUE)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGap(32, 32, 32)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(43, Short.MAX_VALUE))
         );
 
-        jTabbedPane4.addTab("Resultados", jPanel2);
+        pestaña_analisis.addTab("Resultados", jPanel2);
 
-        getContentPane().add(jTabbedPane4, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 60, 800, 410));
+        getContentPane().add(pestaña_analisis, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 60, 800, 410));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void cerrarS_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cerrarS_btnActionPerformed
+        UIManager.put("OptionPane.noButtonText", "No"); // texto para cancel es Cancelar
+        UIManager.put("OptionPane.yesButtonText", "Sí"); // texto para ok es Aceptar
+        int input = JOptionPane.showConfirmDialog(null, "¿Desea cerrar sesión?", "Advertencia", JOptionPane.YES_NO_OPTION);
+        if(input == 0){
+            dispose();
+            new Login().setVisible(true); 
+        }
+    }//GEN-LAST:event_cerrarS_btnActionPerformed
+
+    private void combo_muestraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_combo_muestraActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_combo_muestraActionPerformed
+
+    private void analizar_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_analizar_btnActionPerformed
+        
+        int indexMuestra = 0;
+        
+        //Validación de que el JComboBox no esté vacío, si está vacío el investigador no tiene muestras asignadas
+        if(combo_muestra.getSelectedItem() == null){
+            JOptionPane.showMessageDialog(null,"El investigador todavía no tiene muestras asignadas", "Error", JOptionPane.INFORMATION_MESSAGE);
+        }
+        else{
+            //Se crean matrices auxiliares que contendran los patrones de los objetos seleccionados en los ComboBox
+            int[][] muestra = null;
+            int[][] patron = null;
+            
+            //Se recorre la lista estática de muestras para recuperar el patrón y almacenarlo en la matriz de enteros "muestra"
+            for(Muestra muestra_temp:Escribir_muestra.muestras){
+                if(muestra_temp.getDescripcion().equals(combo_muestra.getSelectedItem().toString())){
+                    muestra = muestra_temp.getPatron();
+                    break;
+                }
+                indexMuestra++;
+            }
+            
+            int l = muestra.length;
+            int[][] temporal1 = new int[l][l];
+            int[][] temporal2 = new int[l][l];
+            int[][] temporal3 = new int[l][l];
+            
+            //Se recorre la lista estática de patrones para recuperar el patron y almacenarlo en la matriz de enteros "patron"
+            for(Patron patron_temp:Escribir_patron.patrones){
+                if(patron_temp.getNombre().equals(combo_patron.getSelectedItem().toString())){
+                    patron = patron_temp.getPatron();
+                }
+            }
+            
+            if(muestra.length != patron.length){
+                JOptionPane.showMessageDialog(null,"El tamaño de los patrones no coincide", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+            else{
+                //Se define la matriz temporal1 y temporal2
+                for(int i=0; i<muestra.length; i++){
+                    for(int j=0; j<muestra[0].length; j++){
+                        temporal1[i][j] = 3 * muestra[i][j];
+                        temporal2[i][j] = 7 * muestra[i][j];
+                    }
+                }
+
+                //Se define la matriz temporal3, multiplicando temporal1 * temporal2
+                for(int i=0; i<muestra.length; i++){
+                    for(int j=0; j<muestra[0].length; j++){
+                        temporal3[i][j] = temporal1[i][j] * temporal2[i][j];
+                        temporal3[i][j] %= 2;
+                    }
+                }
+
+//                for(int i=0; i<muestra.length; i++){
+//                    for(int j=0; j<muestra[0].length; j++){
+//                        
+//                    }
+//                }
+//                System.out.println("");
+//                for(int i=0; i<muestra.length; i++){
+//                    for(int j=0; j<muestra[0].length; j++){
+//                        System.out.print(patron[i][j]);
+//                    }
+//                    System.out.println("");
+//                }
+
+                if(Arrays.deepEquals(temporal3, patron)){ //Si las matrices son iguales, la muestra coincide con el patrón
+                    
+                    Escribir_muestra.muestras.get(indexMuestra).setEstado("Procesado"); //Se cambia el estado de la muestra
+                    Escribir_muestraBinaria.escribir_muestrabin(); //Se escribe el nuevo ArrayList de muestras en binario
+                    MuestraDeInvestigador borrar_muestra = new MuestraDeInvestigador(); //Se crea un objeto para eliminar la muestra del investigador
+                    
+                    //Se utiliza el método borrar_MuestraInvestigador para quitarla del ArrayList del investigador
+                    borrar_muestra.borrar_MuestraInvestigador(indexInvestigador, combo_muestra.getSelectedItem().toString(), Escribir_investigador.investigadores);
+                    Escribir_investigador.investigadores.get(indexInvestigador).setNumExperimentos(Escribir_investigador.investigadores.get(indexInvestigador).getNumExperimentos() - 1);
+                    Escribir_InvestigadorBinario.escribir_investigadorbin(); //Se escribe el binario con el nuevo investigador
+                    
+                    //Se le coloca el texto al JLabel de las coincidencias
+                    label_txtResultados.setText("La muestra \"" + combo_muestra.getSelectedItem().toString() + "\" indica que los resultados coinciden con " + combo_patron.getSelectedItem().toString());  
+                    
+                    combo_muestra.removeAllItems(); //Se borran todos los datos del JComboBox
+                    
+                    //Se recorre el nuevo ArrayList de muestras de investigador y se agregan al JComboBox
+                    for(int i=0; i<Escribir_investigador.investigadores.get(indexInvestigador).getMuestra_asignada().size(); i++){
+                        //Se crea una copia temporal de la muestra en la posición i de la lista de muestras del investigador. Se debe realizar un casteo del objeto a tipo Muestra para conseguir los métodos de ese tipo de objetos
+                        Muestra muestra_temp = (Muestra) Escribir_investigador.investigadores.get(indexInvestigador).getMuestra_asignada().get(i);
+                        combo_muestra.addItem(muestra_temp.getDescripcion()); //Se agega la descripción de la muestra al JComboBox
+                    }
+
+                }
+                else{ //Si no se encontraron coincidencias, se muestra un mensaje en el JLabel
+                    label_txtResultados.setText("La muestra \"" + combo_muestra.getSelectedItem().toString() + "\" indica que los resultados no coinciden con " + combo_patron.getSelectedItem().toString());  
+                }
+            }
+        }
+    }//GEN-LAST:event_analizar_btnActionPerformed
 
     /**
      * @param args the command line arguments
@@ -147,13 +360,21 @@ public class Investigador extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JLabel jLabel2;
+    private javax.swing.JButton analizar_btn;
+    private javax.swing.JButton cerrarS_btn;
+    private javax.swing.JComboBox<String> combo_muestra;
+    private javax.swing.JComboBox<String> combo_patron;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollBar jScrollBar1;
-    private javax.swing.JTabbedPane jTabbedPane4;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTable jTable1;
     private javax.swing.JLabel label_analisis;
     private javax.swing.JLabel label_investigador;
+    private javax.swing.JLabel label_muestra;
+    private javax.swing.JLabel label_patron;
+    private javax.swing.JLabel label_txtResultados;
+    private javax.swing.JLabel laber_resultados;
+    private javax.swing.JTabbedPane pestaña_analisis;
     // End of variables declaration//GEN-END:variables
 }

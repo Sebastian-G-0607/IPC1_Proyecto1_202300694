@@ -40,6 +40,10 @@ public class Escribir_investigador {
         
         
     }
+    
+    public static void indiceDeMuestra_investigador(List<Object> muestras){
+        
+    }
             
     
       

@@ -5,6 +5,8 @@
 package clases;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -18,7 +20,7 @@ public class Investigador implements Serializable{
     private String nombre;
     private char genero;
     private int numExperimentos = 0;
-    private Muestra muestra_asignada;
+    private List<Muestra> muestra_asignada = new ArrayList<>();
     private String contrasenia;
     
     public Investigador(){
@@ -30,7 +32,7 @@ public class Investigador implements Serializable{
         this.nombre = nombre;
         this.genero = genero;
         this.numExperimentos = numExperimentos;
-        this.muestra_asignada = muestra_asignada;
+        this.muestra_asignada.add(muestra_asignada);
     }
     
     public Investigador(String codigo, String nombre, char genero, String contrasenia){
@@ -99,7 +101,7 @@ public class Investigador implements Serializable{
     /**
      * @return the muestra_asignada
      */
-    public Muestra getMuestra_asignada() {
+    public List getMuestra_asignada() {
         return muestra_asignada;
     }
 
@@ -107,7 +109,7 @@ public class Investigador implements Serializable{
      * @param muestra_asignada the muestra_asignada to set
      */
     public void setMuestra_asignada(Muestra muestra_asignada) {
-        this.muestra_asignada = muestra_asignada;
+        this.muestra_asignada.add(muestra_asignada);
     }
 
     /**

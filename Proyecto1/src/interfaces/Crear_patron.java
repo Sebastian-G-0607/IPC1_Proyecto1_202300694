@@ -152,13 +152,6 @@ public class Crear_patron extends javax.swing.JFrame {
 
             
             Escribir_patron.patrones.add(patronTemp); //El patron temporal se ingresa en el ArrayList
-            System.out.println("codigo: " + patronTemp.getCodigo() + " nombre: " + patronTemp.getNombre());
-            for(int i=0; i<3; i++){
-                for(int j=0; j<3; j++){
-                    System.out.print(patronTemp.getPatron()[i][j] + " ");
-                }
-                System.out.println("");
-            }
             
             Escribir_patronBinario.escribir_patronbin();//Se escribe el Array de patrones en el archivo binario
             Actualizar_Tabla.nuevo_patron(Administrador.dtm_patrones, Escribir_patron.patrones, Administrador.ver); //Se actualiza la tabla de patrones

@@ -9,7 +9,7 @@ public class Muestra implements Serializable{
     private String codigo;
     private String descripcion;
     private int[][] patron;
-    private String estado; //Los estados posibles son: "Ingreso", "En proceso" y "Procesado"
+    private String estado = "Ingreso"; //Los estados posibles son: "Ingreso", "En proceso" y "Procesado"
     
     //Constructor para una muestra
 

@@ -1,5 +1,6 @@
 package clases;
 
+import java.io.EOFException;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -53,6 +54,9 @@ public class Escribir_InvestigadorBinario {
 
         } catch (FileNotFoundException e) {
             JOptionPane.showMessageDialog(null, "El sistema almacena los datos en " + e.getMessage() + ". Se creará un archivo para almacenar los datos", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+        catch(EOFException e){
+            JOptionPane.showMessageDialog(null, "El sistema no encontró datos de Investigadores", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
     

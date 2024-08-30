@@ -1,6 +1,7 @@
 package interfaces;
 
 //Se importan las bibliotecas de objeto investigador y para escribir los investigadores en el arraylist
+import clases.Actualizar_Tabla;
 import clases.Escribir_investigador;
 import clases.Investigador;
 import javax.swing.JButton;
@@ -21,6 +22,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import static java.lang.Math.sqrt;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.logging.Level;
@@ -34,9 +36,9 @@ import javax.swing.UIManager;
 public class Administrador extends javax.swing.JFrame {
 
     //Se crea un dtm estático para agregar y actualizar datos de la tabla
-    public static DefaultTableModel dtm1 = new DefaultTableModel();
-    public static DefaultTableModel dtm_muestras;
-    public static DefaultTableModel dtm_patrones;
+    public static DefaultTableModel dtm1 = new DefaultTableModel(); //default table model para investigadores
+    public static DefaultTableModel dtm_muestras; //default table model para muestras
+    public static DefaultTableModel dtm_patrones; //default table model para patrones
     private JButton cerrarsesion;
 
     //Creación del botón VER de la tabla de muestras
@@ -69,7 +71,8 @@ public class Administrador extends javax.swing.JFrame {
         dtm1.setColumnIdentifiers(id); //Se agrega el vector id al encabezado de la tabla como títulos
         tabla_investigadores.setModel(dtm1); //Se asigna el dtm1 a la tabla_investigadores
 
-        //Se crea la tabla que contiene las muestras y la tabla que contiene los patrones
+        //Se crean la tablas que contienen investigadores, las muestras y la tabla que contiene los patrones
+        tabla_investigadores();
         tabla_muestras();
         tabla_patrones();
         
@@ -99,6 +102,15 @@ public class Administrador extends javax.swing.JFrame {
 
     }
 
+    public void tabla_investigadores() {
+        tabla_investigadores.setDefaultRenderer(Object.class, new RenderTabla());
+        dtm1 = new DefaultTableModel(); //Se inicializa el dtm_muestras
+        String id[] = {"Código", "Nombre", "Genero", "Experimentos"};
+        dtm1.setColumnIdentifiers(id); //Se agrega el vector id al encabezado del dtm_muestras
+        tabla_investigadores.setModel(dtm1); //A la tabla muestras se le asigna el modelo que se definió arriba
+        tabla_investigadores.setRowHeight(20); //Se ajusta el alto de la fila
+    }
+    
     //Función para crear la tabla que contiene las muestras, especial porque se crea un botón en la última columna.
     public void tabla_muestras() {
         tabla_muestras.setDefaultRenderer(Object.class, new RenderTabla());
@@ -154,7 +166,7 @@ public class Administrador extends javax.swing.JFrame {
         crear_patron_btn = new javax.swing.JButton();
         cargar_patron_btn = new javax.swing.JButton();
         eliminar_patron_btn = new javax.swing.JButton();
-        jButton1 = new javax.swing.JButton();
+        cerrarS_4 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -284,6 +296,11 @@ public class Administrador extends javax.swing.JFrame {
         });
 
         cargar_muestra_btn.setText("CARGAR");
+        cargar_muestra_btn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cargar_muestra_btnActionPerformed(evt);
+            }
+        });
 
         cerrarS_2.setText("Cerrar Sesión");
         cerrarS_2.addActionListener(new java.awt.event.ActionListener() {
@@ -419,6 +436,11 @@ public class Administrador extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        tabla_patrones.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tabla_patronesMouseClicked(evt);
+            }
+        });
         jScrollPane3.setViewportView(tabla_patrones);
 
         crear_patron_btn.setText("CREAR");
@@ -429,6 +451,11 @@ public class Administrador extends javax.swing.JFrame {
         });
 
         cargar_patron_btn.setText("CARGAR");
+        cargar_patron_btn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cargar_patron_btnActionPerformed(evt);
+            }
+        });
 
         eliminar_patron_btn.setText("ELIMINAR");
         eliminar_patron_btn.addActionListener(new java.awt.event.ActionListener() {
@@ -437,10 +464,10 @@ public class Administrador extends javax.swing.JFrame {
             }
         });
 
-        jButton1.setText("Cerrar Sesión");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        cerrarS_4.setText("Cerrar Sesión");
+        cerrarS_4.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                cerrarS_4ActionPerformed(evt);
             }
         });
 
@@ -463,7 +490,7 @@ public class Administrador extends javax.swing.JFrame {
                         .addContainerGap(47, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pestaña_patronesLayout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jButton1)
+                        .addComponent(cerrarS_4)
                         .addGap(30, 30, 30))))
         );
         pestaña_patronesLayout.setVerticalGroup(
@@ -478,7 +505,7 @@ public class Administrador extends javax.swing.JFrame {
                         .addGap(18, 18, 18)
                         .addComponent(eliminar_patron_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jButton1))
+                        .addComponent(cerrarS_4))
                     .addGroup(pestaña_patronesLayout.createSequentialGroup()
                         .addGap(32, 32, 32)
                         .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 360, javax.swing.GroupLayout.PREFERRED_SIZE)))
@@ -513,7 +540,7 @@ public class Administrador extends javax.swing.JFrame {
 
     //Método que captura el evento del botón eliminar
     private void eliminar_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_eliminar_btnActionPerformed
-        new Eliminar_Investigador().setVisible(true);
+         new Eliminar_Investigador().setVisible(true);
     }//GEN-LAST:event_eliminar_btnActionPerformed
 
     private void crear_muestra_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_crear_muestra_btnActionPerformed
@@ -558,14 +585,17 @@ public class Administrador extends javax.swing.JFrame {
             if(indexInvestigador == -1 || indexMuestra == -1){ //Si alguno de los índices es -1, no se encontrarón coincidencias
                 JOptionPane.showMessageDialog(null, "No se encontraron coincidencias", "Error", JOptionPane.ERROR_MESSAGE);
             } 
-            else if(Escribir_muestra.muestras.get(indexMuestra).getEstado().equals("En proceso")){
+            else if(Escribir_muestra.muestras.get(indexMuestra).getEstado().equals("En proceso")){ // || Escribir_muestra.muestras.get(indexMuestra).getEstado().equals("Procesado")
                 JOptionPane.showMessageDialog(null,"La muestra ya fue asignada a otro investigador", "Error", JOptionPane.ERROR_MESSAGE);
             }
             else{ //Si no se cumple ninguna condición anterior, se asigna la muestra al investigador
                 Escribir_investigador.investigadores.get(indexInvestigador).setMuestra_asignada(Escribir_muestra.muestras.get(indexMuestra)); //Se asigna la muestra con el indexMuestra al investigador con el indexInvestigador
+                Escribir_investigador.investigadores.get(indexInvestigador).setNumExperimentos(Escribir_investigador.investigadores.get(indexInvestigador).getNumExperimentos() + 1);
                 Escribir_muestra.muestras.get(indexMuestra).setEstado("En proceso");
+                Actualizar_Tabla.actualizar_elemento(dtm1, indexInvestigador, Escribir_investigador.investigadores);
                 Escribir_InvestigadorBinario.escribir_investigadorbin();
                 Escribir_muestraBinaria.escribir_muestrabin();
+                Actualizar_Tabla.actualizar_muestra(dtm_muestras, indexMuestra, Escribir_muestra.muestras);
                 JOptionPane.showMessageDialog(null,"Se asignó la muestra correctamente al investigador", "", JOptionPane.INFORMATION_MESSAGE); //Mensaje de asignación exitosa
             }
         }
@@ -634,7 +664,7 @@ public class Administrador extends javax.swing.JFrame {
 
 //                    System.out.println("Archivo HTML creado exitosamente en: " + path);
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    JOptionPane.showMessageDialog(null,e);
                 }
             }
         }
@@ -664,19 +694,108 @@ public class Administrador extends javax.swing.JFrame {
     }//GEN-LAST:event_cerrarS_1ActionPerformed
 
     private void cerrarS_2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cerrarS_2ActionPerformed
-        dispose();
-        new Login().setVisible(true);
+        UIManager.put("OptionPane.noButtonText", "No"); // texto para cancel es Cancelar
+        UIManager.put("OptionPane.yesButtonText", "Sí"); // texto para ok es Aceptar
+        int input = JOptionPane.showConfirmDialog(null, "¿Desea cerrar sesión?", "Advertencia", JOptionPane.YES_NO_OPTION);
+        if(input == 0){
+            dispose();
+            new Login().setVisible(true); 
+        }
     }//GEN-LAST:event_cerrarS_2ActionPerformed
 
     private void cerrarS_3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cerrarS_3ActionPerformed
-        dispose();
-        new Login().setVisible(true);
+        UIManager.put("OptionPane.noButtonText", "No"); // texto para cancel es Cancelar
+        UIManager.put("OptionPane.yesButtonText", "Sí"); // texto para ok es Aceptar
+        int input = JOptionPane.showConfirmDialog(null, "¿Desea cerrar sesión?", "Advertencia", JOptionPane.YES_NO_OPTION);
+        if(input == 0){
+            dispose();
+            new Login().setVisible(true); 
+        }
     }//GEN-LAST:event_cerrarS_3ActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        dispose();
-        new Login().setVisible(true);
-    }//GEN-LAST:event_jButton1ActionPerformed
+    private void cerrarS_4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cerrarS_4ActionPerformed
+        UIManager.put("OptionPane.noButtonText", "No"); // texto para cancel es Cancelar
+        UIManager.put("OptionPane.yesButtonText", "Sí"); // texto para ok es Aceptar
+        int input = JOptionPane.showConfirmDialog(null, "¿Desea cerrar sesión?", "Advertencia", JOptionPane.YES_NO_OPTION);
+        if(input == 0){
+            dispose();
+            new Login().setVisible(true); 
+        }
+    }//GEN-LAST:event_cerrarS_4ActionPerformed
+
+    private void cargar_muestra_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cargar_muestra_btnActionPerformed
+        Cargar_csv cargar = new Cargar_csv();
+        if (cargar.cargarCSV() == 1) { //Si se cumple esta condición, el usuario ingresó sí seleccionó un archivo
+            try {
+                cargar.cargarcsvMuestra(cargar.ruta, 1); //Se utiliza el método para cargar las muestras del csv al array y luego grabarlos en el archivo binario
+            } catch (IOException ex) { //Se captura la excepción
+                JOptionPane.showMessageDialog(null, ex);
+            }
+
+        }
+    }//GEN-LAST:event_cargar_muestra_btnActionPerformed
+
+    private void cargar_patron_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cargar_patron_btnActionPerformed
+        Cargar_csv cargar = new Cargar_csv();
+        if (cargar.cargarCSV() == 1) { //Si se cumple esta condición, el usuario ingresó sí seleccionó un archivo
+            try {
+                cargar.cargarcsvMuestra(cargar.ruta, 2); //Se utiliza el método para cargar las muestras del csv al array y luego grabarlos en el archivo binario
+            } catch (IOException ex) { //Se captura la excepción
+                JOptionPane.showMessageDialog(null, ex);
+            }
+
+        }
+    }//GEN-LAST:event_cargar_patron_btnActionPerformed
+
+    private void tabla_patronesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabla_patronesMouseClicked
+                //Se guarda el indice de la columna sobre la que se hizo click
+        columna = tabla_patrones.getColumnModel().getColumnIndexAtX(evt.getX()); 
+        //Se guarda el índice de la fila sobre la que se hizo click
+        fila = evt.getY()/tabla_patrones.getRowHeight(); 
+        
+        if(columna<=tabla_patrones.getColumnCount() && columna>=0 && fila<=tabla_patrones.getRowCount() && fila>=0){ //Condición para validar que exista al menos una columna y una fila
+            
+            Object obj = tabla_patrones.getValueAt(fila, columna);
+            
+            if(obj instanceof JButton){ //Si se presionó el botón ver, se ejecuta el siguiente bloque
+                
+                int index = fila; //Se guarda el índice de la fila de la que se presionó el botón
+                String path = Escribir_patron.patrones.get(index).getCodigo() + ".html"; //Se crea un string con extensión html para crear un archivo
+                
+                try (BufferedWriter writer = new BufferedWriter(new FileWriter(path))) {
+                    
+                    writer.write("<!DOCTYPE html>\n");
+                    writer.write("<html>\n");
+                    writer.write("<head>\n");
+                    writer.write("<title>" + "Patron " + Escribir_patron.patrones.get(index).getCodigo() + "</title>\n");
+                    writer.write("</head>\n");
+                    writer.write("<body>\n");
+                    writer.write("<h2>Matriz perteneciente al patrón " + Escribir_patron.patrones.get(index).getCodigo() + "</h2>\n");
+                    writer.write("<table border=\"1\">\n");
+
+                    // Escribir filas y columnas de la matriz
+                    for (int i = 0; i < Escribir_patron.patrones.get(index).getPatron().length; i++) {
+                        writer.write("<tr>\n");
+                        for (int j = 0; j < Escribir_patron.patrones.get(index).getPatron()[i].length; j++) {
+                            writer.write("<td>" + Escribir_patron.patrones.get(index).getPatron()[i][j] + "</td>\n");
+                        }
+                        writer.write("</tr>\n");
+                    }
+
+                    writer.write("</table>\n");
+                    writer.write("</body>\n");
+                    writer.write("</html>\n");
+                    
+                    File html = new File(path);
+                    Desktop.getDesktop().open(html);
+
+//                    System.out.println("Archivo HTML creado exitosamente en: " + path);
+                } catch (IOException e) {
+                    JOptionPane.showMessageDialog(null,e);
+                }
+            }
+        }
+    }//GEN-LAST:event_tabla_patronesMouseClicked
 
     /**
      * @param args the command line arguments
@@ -702,6 +821,7 @@ public class Administrador extends javax.swing.JFrame {
     private javax.swing.JButton cerrarS_1;
     private javax.swing.JButton cerrarS_2;
     private javax.swing.JButton cerrarS_3;
+    private javax.swing.JButton cerrarS_4;
     public static javax.swing.JComboBox<String> combo_investigador;
     public static javax.swing.JComboBox<String> combo_muestra;
     private javax.swing.JButton crear_btn;
@@ -709,7 +829,6 @@ public class Administrador extends javax.swing.JFrame {
     private javax.swing.JButton crear_patron_btn;
     private javax.swing.JButton eliminar_btn;
     private javax.swing.JButton eliminar_patron_btn;
-    private javax.swing.JButton jButton1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;

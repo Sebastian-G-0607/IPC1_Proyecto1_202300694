@@ -7,6 +7,7 @@ package clases;
 import static clases.Escribir_muestra.muestras;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.JComboBox;
 
 /**
 
@@ -27,5 +28,13 @@ public class Escribir_patron {
         }
         return band;
     }
+    
+    public static void Escribir_patronCombo(JComboBox combo, List<Patron> patron){
+
+        combo.removeAllItems();
+        for(Patron patron_temp:patron){
+            combo.addItem(patron_temp.getNombre());
+        }    
+    } 
     
 }

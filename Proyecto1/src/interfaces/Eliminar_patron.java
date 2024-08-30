@@ -7,6 +7,7 @@ package interfaces;
 import clases.Actualizar_Tabla;
 import clases.Escribir_patron;
 import clases.Escribir_patronBinario;
+import java.io.File;
 import javax.swing.JOptionPane;
 
 /**
@@ -107,11 +108,14 @@ public class Eliminar_patron extends javax.swing.JFrame {
         }
         else{ //Si se econtraron coincidencias, se ejecuta el siguiente bloque de código
             nombre = Escribir_patron.patrones.get(index).getNombre(); //Se guarda el nombre del patron para mostrarle al usuario qué patron eliminó
+            String archivo = Escribir_patron.patrones.get(index).getCodigo() + ".html";
+            File html = new File(archivo);
+            html.delete();
             Escribir_patron.patrones.remove(index); //Se elimina el usuario del ArrayList
             Actualizar_Tabla.eliminar_elemento(Administrador.dtm_patrones, index); //Se elimina el registro de la tabla
             JOptionPane.showMessageDialog(null,"Se eliminó el patrón " + codigo + " - " + nombre); //Se muestra el mensaje de que se eliminó el patron, junto con su nombre y su código
             dispose();
-            Escribir_patronBinario.escribir_patronbin(); //Se sobreescribe el binario con el nuevo arrayList
+            Escribir_patronBinario.escribir_patronbin(); //Se sobreescribe el binario con el nuevo arrayList  
         }
     }//GEN-LAST:event_eliminar_btnActionPerformed
 

@@ -27,9 +27,7 @@ public class Cargar_csv {
         JFileChooser selArchivo = new JFileChooser("C:\\Users\\sebas\\OneDrive\\Escritorio"); //Abrir un JFileChooser desde la dirección específicada
         int val = selArchivo.showOpenDialog(null); //Se muestra la interfaz
         if(val != selArchivo.CANCEL_OPTION){ //Si el usuario no cerró el JFileChooser:
-            ruta = selArchivo.getSelectedFile().getAbsolutePath(); 
-//            ruta_archivo = selArchivo.getSelectedFile(); 
-//            System.out.println(ruta); 
+            ruta = selArchivo.getSelectedFile().getAbsolutePath(); //Se guarda la ruta del archivo que el usuario seleccionó
             band = 1; //Se cambia la bandera a 1
             return band; //se retorna band
         }
@@ -46,7 +44,6 @@ public class Cargar_csv {
         int i = rutaArchivo.lastIndexOf("."); //Obtengo el índice donde se encuentra el punto de la ruta del archivo
         if(i>0){
            extension = rutaArchivo.substring(i+1); 
-//            System.out.println(extension);
             
             if(extension.equals("csv")){ //Si la extensión es csv, el archivo se puede leer
                Leer_csv lector = new Leer_csv();
@@ -73,7 +70,6 @@ public class Cargar_csv {
         int i = rutaArchivo.lastIndexOf("."); //Obtengo el índice donde se encuentra el punto de la ruta del archivo
         if(i>0){
            extension = rutaArchivo.substring(i+1); 
-//            System.out.println(extension);
             
             if(extension.equals("csv")){ //Si la extensión es csv, el archivo se puede leer
                Leer_csv lector = new Leer_csv(); // Se instancia un objeto de la clase Leer_csv para leer la matriz del csv
@@ -87,6 +83,27 @@ public class Cargar_csv {
             JOptionPane.showMessageDialog(null,"Archivo no reconocido", "Error", JOptionPane.ERROR_MESSAGE);
         }       
         return matrix;
+    }
+    
+    public void cargarcsvMuestra(String rutaArchivo, int estado) throws IOException{
+        
+        String extension = null;
+        
+        int i = rutaArchivo.lastIndexOf("."); //Obtengo el índice donde se encuentra el punto de la ruta del archivo
+        if(i>0){
+           extension = rutaArchivo.substring(i+1); 
+            
+            if(extension.equals("csv")){ //Si la extensión es csv, el archivo se puede leer
+               Leer_csv lector = new Leer_csv(); // Se instancia un objeto de la clase Leer_csv para leer la matriz del csv
+               lector.leer_cargaMuestra(rutaArchivo, estado); //Se invoca el método leer_cargaMuestra para cargar las muestras del csv
+            }
+            else{
+                JOptionPane.showMessageDialog(null,"El tipo de archivo no es válido", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+        else{
+            JOptionPane.showMessageDialog(null,"Archivo no reconocido", "Error", JOptionPane.ERROR_MESSAGE);
+        }       
     }
     
 }

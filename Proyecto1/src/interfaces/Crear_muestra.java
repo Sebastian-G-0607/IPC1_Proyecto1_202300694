@@ -146,13 +146,12 @@ public class Crear_muestra extends javax.swing.JFrame {
             muestraTemp.setCodigo(codigo);
             muestraTemp.setDescripcion(descripcion);
             muestraTemp.setPatron(patron_muestra); //La matriz del csv se guardó previamente en una matriz que se declaró como variable global en esta clase
-            muestraTemp.setEstado("Ingreso");
             
             Escribir_muestra.muestras.add(muestraTemp); //La muestra temporal se ingresa en el ArrayList
 
             
-            Escribir_patronBinario.escribir_patronbin(); //Se escribe el Array de patrones en el archivo binario
-            Actualizar_Tabla.nueva_muestra(Administrador.dtm_patrones, Escribir_muestra.muestras, Administrador.ver); //Se actualiza la tabla de muestras
+            Escribir_muestraBinaria.escribir_muestrabin(); //Se escribe el Array de muestras en el archivo binario
+            Actualizar_Tabla.nueva_muestra(Administrador.dtm_muestras, Escribir_muestra.muestras, Administrador.ver); //Se actualiza la tabla de muestras
             
             JOptionPane.showMessageDialog(null, "Se ha introducido la muestra correctamente"); //Mensaje de agregado con éxito
             patron_muestra = null; //Se limpia la variable patron_muestra para que se pueda ingresar otra muestra posteriormente

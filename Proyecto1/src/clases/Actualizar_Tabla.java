@@ -36,6 +36,11 @@ public class Actualizar_Tabla {
         
     }
     
+    //Método estático para actualizar un elemento de la tabla de muestras
+    public static void actualizar_muestra(DefaultTableModel dtm, int index, List<Muestra> muestra) {
+        dtm.setValueAt(muestra.get(index).getEstado(), index, 2);
+    }
+    
     //Método estático para eliminar un elemento de la tabla de investigadores
     public static void eliminar_elemento(DefaultTableModel dtm, int index){
         dtm.removeRow(index);

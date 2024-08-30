@@ -4,7 +4,10 @@ import clases.Actualizar_Tabla;
 import clases.Escribir_InvestigadorBinario;
 import clases.Escribir_investigador;
 import javax.swing.JOptionPane;
-
+import clases.Muestra;
+import clases.Escribir_muestra;
+import java.util.ArrayList;
+import java.util.List;
 /**
  *
  * @author sebas
@@ -94,6 +97,37 @@ public class Eliminar_Investigador extends javax.swing.JFrame {
         }
         else{ //Si se econtraron coincidencias, se ejecuta el siguiente bloque de código
             nombre = Escribir_investigador.investigadores.get(index).getNombre(); //Se guarda el nombre del investigador para mostrarle al usuario qué investigador eliminó
+            
+            //Este if valida que si el investigador a eliminar tiene muestras asignadas, estas tomen el valor de "Ingreso" para que otros a otros investigadores se les pueda asignar luego
+            if(Escribir_investigador.investigadores.get(index).getMuestra_asignada()!= null && !Escribir_investigador.investigadores.get(index).getMuestra_asignada().isEmpty()){
+                
+                int size = Escribir_investigador.investigadores.get(index).getMuestra_asignada().size(); //se guarda la longitud del la lista de muestras del investigador para recorrerla con un bucle
+                
+                List<Integer> indices = new ArrayList<>(); //Se crea un arraylist que guardará los indices de las muestras modificadas
+                
+                //Bucle for que recorre el ArrayList de tipo Muestra que le corresponde al investigador
+                for(int i=0; i<size; i++){
+                    String codigodemuestra; //String temporal que guarda el codigo de la muestra en la posición i
+                    Muestra muestratemp_codigo = (Muestra) Escribir_investigador.investigadores.get(index).getMuestra_asignada().get(i); //Se guarda la muestra con el indice asociado en un Objeto de tipo Muestra, a través de un casteo
+                    codigodemuestra = muestratemp_codigo.getCodigo(); //Se obtiene el código de dicha muestra
+                    
+                    //Bucle for anidado que compara las muestras del investigador con las muestras del sistema y modifica su estado
+                    for(int j=0; j<Escribir_muestra.muestras.size(); j++){
+                        if(codigodemuestra.equals(Escribir_muestra.muestras.get(j).getCodigo())){ //Si el codigo de la muestra temporal es igual a uno de indice i del array de Muestras  se modifica su estado y se guarda el índice
+                            indices.add(j); //Se agrega el índice
+                            Escribir_muestra.muestras.get(j).setEstado("Ingreso"); //Se modifica su estado a Ingreso
+                        }
+                    }
+                }
+                
+                
+                //Bucle for para actualizar todos los elementos de la tabla de Muestras, con los índices almacenados en el ArrayList de indices
+                for(int i=0; i<indices.size(); i++){
+                    Actualizar_Tabla.actualizar_muestra(Administrador.dtm_muestras, indices.get(i), Escribir_muestra.muestras);
+                }
+                
+            }
+            
             Escribir_investigador.investigadores.remove(index); //Se elimina el usuario del ArrayList
             JOptionPane.showMessageDialog(null,"Se eliminó el investigador " + codigo + " - " + nombre); //Se muestra el mensaje de que se eliminó al investigador, junto con su nombre y su código
             Actualizar_Tabla.eliminar_elemento(Administrador.dtm1, index); //Se elimina el registro de la tabla
