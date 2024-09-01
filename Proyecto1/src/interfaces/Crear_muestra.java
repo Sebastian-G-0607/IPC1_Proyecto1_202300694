@@ -1,18 +1,12 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
 package interfaces;
 
 import clases.Actualizar_Tabla;
 import clases.Cargar_csv;
 import clases.Escribir_muestra;
 import clases.Escribir_muestraBinaria;
-import clases.Escribir_patronBinario;
 import clases.Muestra;
 import java.io.IOException;
 import javax.swing.JOptionPane;
-import javax.swing.text.html.HTMLDocument;
 
 /**
 
@@ -152,6 +146,7 @@ public class Crear_muestra extends javax.swing.JFrame {
             
             Escribir_muestraBinaria.escribir_muestrabin(); //Se escribe el Array de muestras en el archivo binario
             Actualizar_Tabla.nueva_muestra(Administrador.dtm_muestras, Escribir_muestra.muestras, Administrador.ver); //Se actualiza la tabla de muestras
+            Escribir_muestra.Escribir_muestraCombo(Administrador.combo_muestra, Escribir_muestra.muestras);
             
             JOptionPane.showMessageDialog(null, "Se ha introducido la muestra correctamente"); //Mensaje de agregado con éxito
             patron_muestra = null; //Se limpia la variable patron_muestra para que se pueda ingresar otra muestra posteriormente

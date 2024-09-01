@@ -18,15 +18,8 @@ import clases.Patron;
 import java.awt.Desktop;
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
-import static java.lang.Math.sqrt;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.UIManager;
 
 /**
@@ -588,6 +581,9 @@ public class Administrador extends javax.swing.JFrame {
             else if(Escribir_muestra.muestras.get(indexMuestra).getEstado().equals("En proceso")){ // || Escribir_muestra.muestras.get(indexMuestra).getEstado().equals("Procesado")
                 JOptionPane.showMessageDialog(null,"La muestra ya fue asignada a otro investigador", "Error", JOptionPane.ERROR_MESSAGE);
             }
+            else if(Escribir_muestra.muestras.get(indexMuestra).getEstado().equals("Procesado")){
+                JOptionPane.showMessageDialog(null,"La muestra ya fue procesada", "Error", JOptionPane.ERROR_MESSAGE);
+            }
             else{ //Si no se cumple ninguna condición anterior, se asigna la muestra al investigador
                 Escribir_investigador.investigadores.get(indexInvestigador).setMuestra_asignada(Escribir_muestra.muestras.get(indexMuestra)); //Se asigna la muestra con el indexMuestra al investigador con el indexInvestigador
                 Escribir_investigador.investigadores.get(indexInvestigador).setNumExperimentos(Escribir_investigador.investigadores.get(indexInvestigador).getNumExperimentos() + 1);
@@ -610,6 +606,7 @@ public class Administrador extends javax.swing.JFrame {
         if (cargar.cargarCSV() == 1) { //Si se cumple esta condición, el usuario ingresó sí seleccionó un archivo
             try {
                 cargar.cargarAlArray(cargar.ruta); //Se utiliza el método para cargar los investigadores del csv al array y luego grabarlos en el archivo binario
+                JOptionPane.showMessageDialog(null, "Carga de investigadores exitosa", "Carga de Investigadores", JOptionPane.INFORMATION_MESSAGE);
             } catch (IOException ex) { //Se captura la excepción
                 JOptionPane.showMessageDialog(null, ex);
             }
@@ -728,6 +725,7 @@ public class Administrador extends javax.swing.JFrame {
         if (cargar.cargarCSV() == 1) { //Si se cumple esta condición, el usuario ingresó sí seleccionó un archivo
             try {
                 cargar.cargarcsvMuestra(cargar.ruta, 1); //Se utiliza el método para cargar las muestras del csv al array y luego grabarlos en el archivo binario
+                JOptionPane.showMessageDialog(null, "Carga de muestras exitosa");
             } catch (IOException ex) { //Se captura la excepción
                 JOptionPane.showMessageDialog(null, ex);
             }
@@ -740,6 +738,7 @@ public class Administrador extends javax.swing.JFrame {
         if (cargar.cargarCSV() == 1) { //Si se cumple esta condición, el usuario ingresó sí seleccionó un archivo
             try {
                 cargar.cargarcsvMuestra(cargar.ruta, 2); //Se utiliza el método para cargar las muestras del csv al array y luego grabarlos en el archivo binario
+                JOptionPane.showMessageDialog(null, "Carga de patrones exitosa");
             } catch (IOException ex) { //Se captura la excepción
                 JOptionPane.showMessageDialog(null, ex);
             }

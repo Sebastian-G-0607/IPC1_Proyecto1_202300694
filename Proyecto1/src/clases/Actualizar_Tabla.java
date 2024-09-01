@@ -1,12 +1,8 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package clases;
 
-import interfaces.Administrador;
 import java.util.List;
 import javax.swing.JButton;
+import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -64,6 +60,10 @@ public class Actualizar_Tabla {
        
         //Se agrega el objeto a la tabla
         dtm.addRow(new Object[]{patron_temp.getCodigo(), patron_temp.getNombre(), btn});
+    }
+    
+    public void crear_txtResultados(JTable tabla_resultados){
+        
     }
      
 }

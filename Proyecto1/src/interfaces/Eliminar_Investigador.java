@@ -99,7 +99,7 @@ public class Eliminar_Investigador extends javax.swing.JFrame {
             nombre = Escribir_investigador.investigadores.get(index).getNombre(); //Se guarda el nombre del investigador para mostrarle al usuario qué investigador eliminó
             
             //Este if valida que si el investigador a eliminar tiene muestras asignadas, estas tomen el valor de "Ingreso" para que otros a otros investigadores se les pueda asignar luego
-            if(Escribir_investigador.investigadores.get(index).getMuestra_asignada()!= null && !Escribir_investigador.investigadores.get(index).getMuestra_asignada().isEmpty()){
+            if(Escribir_investigador.investigadores.get(index).getMuestra_asignada()!= null && !Escribir_investigador.investigadores.get(index).getMuestra_asignada().isEmpty() && Escribir_muestra.muestras != null && !Escribir_muestra.muestras.isEmpty()){
                 
                 int size = Escribir_investigador.investigadores.get(index).getMuestra_asignada().size(); //se guarda la longitud del la lista de muestras del investigador para recorrerla con un bucle
                 

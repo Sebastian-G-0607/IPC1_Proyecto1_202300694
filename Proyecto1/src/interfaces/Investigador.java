@@ -1,7 +1,6 @@
 package interfaces;
 
 import clases.Escribir_InvestigadorBinario;
-import javax.swing.JLabel;
 import clases.Escribir_investigador;
 import clases.Escribir_muestra;
 import clases.Escribir_muestraBinaria;
@@ -9,11 +8,20 @@ import clases.Escribir_patron;
 import clases.Muestra;
 import clases.MuestraDeInvestigador;
 import clases.Patron;
-import java.util.ArrayList;
+import clases.RenderTabla;
+import clases.Tabla_resultados;
+import java.awt.Desktop;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
-import java.util.List;
+import java.util.Date;
+import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -22,7 +30,12 @@ import javax.swing.UIManager;
 public class Investigador extends javax.swing.JFrame {
     
     int indexInvestigador = Login.indexInvestigador;;
+    public static DefaultTableModel dtm_resultados;
 
+    public static JButton ver = new JButton("VER");
+    
+    public static int fila, columna;
+    
     
     /**
      * Creates new form Investigador
@@ -34,10 +47,20 @@ public class Investigador extends javax.swing.JFrame {
         setLocationRelativeTo(null);
         setResizable(false);
         
+        //Se crea una ruta con el nombre "código de investigador" + ".txt"
+        String path = Escribir_investigador.investigadores.get(indexInvestigador).getCodigo() + ".txt";
+        File historial = new File(path); //Se crea un Objeto de tipo File para saber si el archivo existe
+        
+
+        
+        tabla_resultados(); //Se inicaliza la tabla de resultados
+        
+        
+        
         //Comprueba si el ArrayList de muestras asignadas al investigador está vacío, si no está vacío, se agregan las muestras al JComboBox
-        if(!Escribir_investigador.investigadores.get(indexInvestigador).getMuestra_asignada().isEmpty()){
-            
-            
+        if(!Escribir_investigador.investigadores.get(indexInvestigador).getMuestra_asignada().isEmpty() && !Escribir_muestra.muestras.isEmpty()){
+
+            //Se recorre el ArrayList de muestras asignadas al investigador y se agregan al JComboBox
             for(int i=0; i<Escribir_investigador.investigadores.get(indexInvestigador).getMuestra_asignada().size(); i++){
                 
                 //Se crea una copia temporal de la muestra en la posición i de la lista de muestras del investigador. Se debe realizar un casteo del objeto a tipo Muestra para conseguir los métodos de ese tipo de objetos
@@ -47,9 +70,28 @@ public class Investigador extends javax.swing.JFrame {
             
         }
         
-        //Se escriben todos los patrones en el JComboBox de patrones
-        Escribir_patron.Escribir_patronCombo(combo_patron, Escribir_patron.patrones);
+        //Si existen patrones almacenados en el sistema, se agregan todos al JComboBox
+        if(!Escribir_patron.patrones.isEmpty() || Escribir_patron.patrones != null){
+            //Se escriben todos los patrones en el JComboBox de patrones
+            Escribir_patron.Escribir_patronCombo(combo_patron, Escribir_patron.patrones);
+        }
         
+        //Si el archivo historial, que contiene los análisis del investigador, existe, entonces se agregan los datos a la tabla de resultados
+        if(historial.exists()){
+            Tabla_resultados tabulador = new Tabla_resultados(); //Objeto de tipo Tabla_resultados
+            tabulador.leer_txtResultados(path); //Se lee el archivo de texto y se agrega a la tabla
+        }
+        
+    }
+    
+    //método para crear la tabla de resultados
+    public void tabla_resultados() {
+        tabla_resultados.setDefaultRenderer(Object.class, new RenderTabla());
+        dtm_resultados = new DefaultTableModel(); //Se inicializa el dtm_muestras
+        String id[] = {"No.", "Muestra", "Patrón", "Fecha", "Hora", "Resultado", "Acciones"};
+        dtm_resultados.setColumnIdentifiers(id); //Se agrega el vector id al encabezado del dtm_muestras
+        tabla_resultados.setModel(dtm_resultados); //A la tabla muestras se le asigna el modelo que se definió arriba
+        tabla_resultados.setRowHeight(25); //Se ajusta el alto de la fila
     }
 
     /**
@@ -76,7 +118,7 @@ public class Investigador extends javax.swing.JFrame {
         label_txtResultados = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        tabla_resultados = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -167,15 +209,20 @@ public class Investigador extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 54, Short.MAX_VALUE)
                 .addComponent(analizar_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(16, 16, 16)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(laber_resultados)
-                    .addComponent(label_txtResultados, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(label_txtResultados, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(laber_resultados))
                 .addGap(53, 53, 53))
         );
 
         pestaña_analisis.addTab("Análisis", jPanel1);
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        tabla_resultados = new javax.swing.JTable(){
+            public boolean isCellEditable(int row, int column){
+                return false;
+            }
+        };
+        tabla_resultados.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -186,7 +233,12 @@ public class Investigador extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        jScrollPane1.setViewportView(jTable1);
+        tabla_resultados.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tabla_resultadosMouseClicked(evt);
+            }
+        });
+        jScrollPane1.setViewportView(tabla_resultados);
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -229,12 +281,14 @@ public class Investigador extends javax.swing.JFrame {
     private void analizar_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_analizar_btnActionPerformed
         
         int indexMuestra = 0;
+        String nombreMuestra = null;
+        String nombrePatron = null;
         
         //Validación de que el JComboBox no esté vacío, si está vacío el investigador no tiene muestras asignadas
         if(combo_muestra.getSelectedItem() == null){
             JOptionPane.showMessageDialog(null,"El investigador todavía no tiene muestras asignadas", "Error", JOptionPane.INFORMATION_MESSAGE);
         }
-        else{
+        else{ //Si los JComboBox tienen información, se ejecuta el bloque:
             //Se crean matrices auxiliares que contendran los patrones de los objetos seleccionados en los ComboBox
             int[][] muestra = null;
             int[][] patron = null;
@@ -242,6 +296,7 @@ public class Investigador extends javax.swing.JFrame {
             //Se recorre la lista estática de muestras para recuperar el patrón y almacenarlo en la matriz de enteros "muestra"
             for(Muestra muestra_temp:Escribir_muestra.muestras){
                 if(muestra_temp.getDescripcion().equals(combo_muestra.getSelectedItem().toString())){
+                    nombreMuestra = muestra_temp.getCodigo();
                     muestra = muestra_temp.getPatron();
                     break;
                 }
@@ -252,16 +307,44 @@ public class Investigador extends javax.swing.JFrame {
             int[][] temporal1 = new int[l][l];
             int[][] temporal2 = new int[l][l];
             int[][] temporal3 = new int[l][l];
+            int[][] modular = new int[l][l];
             
             //Se recorre la lista estática de patrones para recuperar el patron y almacenarlo en la matriz de enteros "patron"
             for(Patron patron_temp:Escribir_patron.patrones){
                 if(patron_temp.getNombre().equals(combo_patron.getSelectedItem().toString())){
+                    nombrePatron = patron_temp.getCodigo();
                     patron = patron_temp.getPatron();
+                    break;
                 }
             }
             
             if(muestra.length != patron.length){
                 JOptionPane.showMessageDialog(null,"El tamaño de los patrones no coincide", "Error", JOptionPane.ERROR_MESSAGE);
+                
+                //Se crea un archivo txt con el código del investigador para almacenar su historial de resultados
+                String path = Escribir_investigador.investigadores.get(indexInvestigador).getCodigo() + ".txt";
+
+                Tabla_resultados tabulador = new Tabla_resultados(); //Objeto de la clase Tabla_resultados
+
+                //Se escriben los resultados en el archivo de texto
+                tabulador.escribir_txtResultados(tabla_resultados, 0, path, Escribir_investigador.investigadores.get(indexInvestigador).getContadorDeAnalisis(), nombreMuestra, nombrePatron);
+
+                //Se crea una variable que almacena la fecha
+                Date current = new Date();
+                SimpleDateFormat formato = new SimpleDateFormat("dd-MM-YYYY");
+
+                //Se crea una variable que almacena la hora
+                DateFormat format = new SimpleDateFormat("HH:mm:ss");
+                Date fecha = new Date();
+
+                //Se agregan los datos a la tabla en tiempo de ejecución
+                tabulador.agregar_resultado(dtm_resultados, String.valueOf(Escribir_investigador.investigadores.get(indexInvestigador).getContadorDeAnalisis()), nombreMuestra, nombrePatron, formato.format(current), format.format(fecha), "Fallido", ver);
+                
+                tabulador.crear_reporteDifLong(muestra, patron, String.valueOf(Escribir_investigador.investigadores.get(indexInvestigador).getContadorDeAnalisis()), nombreMuestra, nombrePatron);
+                //Se actualiza el contador de análisis del investigador
+                Escribir_investigador.investigadores.get(indexInvestigador).setContadorDeAnalisis(Escribir_investigador.investigadores.get(indexInvestigador).getContadorDeAnalisis() + 1);
+
+                Escribir_InvestigadorBinario.escribir_investigadorbin(); //Se escribe en el binario el investigador con el contador actualizado
             }
             else{
                 //Se define la matriz temporal1 y temporal2
@@ -273,27 +356,18 @@ public class Investigador extends javax.swing.JFrame {
                 }
 
                 //Se define la matriz temporal3, multiplicando temporal1 * temporal2
-                for(int i=0; i<muestra.length; i++){
-                    for(int j=0; j<muestra[0].length; j++){
-                        temporal3[i][j] = temporal1[i][j] * temporal2[i][j];
-                        temporal3[i][j] %= 2;
+                for (int i = 0; i < muestra.length; i++) {
+                    for (int j = 0; j < muestra.length; j++) {
+                        for (int k = 0; k < muestra.length; k++) {
+                            // aquí se multiplica la matriz
+                            temporal3[i][j] += temporal1[i][k] * temporal2[k][j];
+                            modular[i][j] = temporal3[i][j]%2;
+                        }
                     }
                 }
+                
 
-//                for(int i=0; i<muestra.length; i++){
-//                    for(int j=0; j<muestra[0].length; j++){
-//                        
-//                    }
-//                }
-//                System.out.println("");
-//                for(int i=0; i<muestra.length; i++){
-//                    for(int j=0; j<muestra[0].length; j++){
-//                        System.out.print(patron[i][j]);
-//                    }
-//                    System.out.println("");
-//                }
-
-                if(Arrays.deepEquals(temporal3, patron)){ //Si las matrices son iguales, la muestra coincide con el patrón
+                if(Arrays.deepEquals(modular, patron)){ //Si las matrices son iguales, la muestra coincide con el patrón
                     
                     Escribir_muestra.muestras.get(indexMuestra).setEstado("Procesado"); //Se cambia el estado de la muestra
                     Escribir_muestraBinaria.escribir_muestrabin(); //Se escribe el nuevo ArrayList de muestras en binario
@@ -301,7 +375,7 @@ public class Investigador extends javax.swing.JFrame {
                     
                     //Se utiliza el método borrar_MuestraInvestigador para quitarla del ArrayList del investigador
                     borrar_muestra.borrar_MuestraInvestigador(indexInvestigador, combo_muestra.getSelectedItem().toString(), Escribir_investigador.investigadores);
-                    Escribir_investigador.investigadores.get(indexInvestigador).setNumExperimentos(Escribir_investigador.investigadores.get(indexInvestigador).getNumExperimentos() - 1);
+           
                     Escribir_InvestigadorBinario.escribir_investigadorbin(); //Se escribe el binario con el nuevo investigador
                     
                     //Se le coloca el texto al JLabel de las coincidencias
@@ -309,20 +383,114 @@ public class Investigador extends javax.swing.JFrame {
                     
                     combo_muestra.removeAllItems(); //Se borran todos los datos del JComboBox
                     
-                    //Se recorre el nuevo ArrayList de muestras de investigador y se agregan al JComboBox
+                    //Una vez eliminada la muestra, se recorre el nuevo ArrayList de muestras de investigador y se agregan al JComboBox
                     for(int i=0; i<Escribir_investigador.investigadores.get(indexInvestigador).getMuestra_asignada().size(); i++){
                         //Se crea una copia temporal de la muestra en la posición i de la lista de muestras del investigador. Se debe realizar un casteo del objeto a tipo Muestra para conseguir los métodos de ese tipo de objetos
                         Muestra muestra_temp = (Muestra) Escribir_investigador.investigadores.get(indexInvestigador).getMuestra_asignada().get(i);
                         combo_muestra.addItem(muestra_temp.getDescripcion()); //Se agega la descripción de la muestra al JComboBox
                     }
-
+                    
+                    //Se crea un archivo txt con el código del investigador para almacenar su historial de resultados
+                    String path = Escribir_investigador.investigadores.get(indexInvestigador).getCodigo() + ".txt";
+                    
+                    Tabla_resultados tabulador = new Tabla_resultados(); //Objeto de la clase Tabla_resultados
+                    
+                    //Se escriben los resultados en el archivo de texto
+                    tabulador.escribir_txtResultados(tabla_resultados, 1, path, Escribir_investigador.investigadores.get(indexInvestigador).getContadorDeAnalisis(), nombreMuestra, nombrePatron);
+                
+                    //Se crea una variable que almacena la fecha
+                    Date current = new Date();
+                    SimpleDateFormat formato = new SimpleDateFormat("dd-MM-YYYY");
+                    
+                    //Se crea una variable que almacena la hora
+                    DateFormat format = new SimpleDateFormat("HH:mm:ss");
+                    Date fecha = new Date();
+            
+                    //Se agregan los datos a la tabla en tiempo de ejecución
+                    tabulador.agregar_resultado(dtm_resultados, String.valueOf(Escribir_investigador.investigadores.get(indexInvestigador).getContadorDeAnalisis()), nombreMuestra, nombrePatron, formato.format(current), format.format(fecha), "Exitoso", ver);
+                    
+                    //Se crea el reporte en html
+                    tabulador.crear_reporte(muestra, patron, temporal3, modular, String.valueOf(Escribir_investigador.investigadores.get(indexInvestigador).getContadorDeAnalisis()), nombreMuestra, nombrePatron, 1);
+                    
+                    //Se actualiza el contador de análisis del investigador
+                    Escribir_investigador.investigadores.get(indexInvestigador).setContadorDeAnalisis(Escribir_investigador.investigadores.get(indexInvestigador).getContadorDeAnalisis() + 1);
+                    
+                    Escribir_InvestigadorBinario.escribir_investigadorbin(); //Se escribe en el binario el investigador con el contador actualizado
                 }
                 else{ //Si no se encontraron coincidencias, se muestra un mensaje en el JLabel
                     label_txtResultados.setText("La muestra \"" + combo_muestra.getSelectedItem().toString() + "\" indica que los resultados no coinciden con " + combo_patron.getSelectedItem().toString());  
+                    
+                    //Se crea la ruta para escribir en el archivo de texto
+                    String path = Escribir_investigador.investigadores.get(indexInvestigador).getCodigo() + ".txt";
+                    
+                    Tabla_resultados tabulador = new Tabla_resultados(); //Objeto de tipo Tabla_resultados
+                    
+                    //Se escriben los resultados en el archivo de texto
+                    tabulador.escribir_txtResultados(tabla_resultados, 0, path, Escribir_investigador.investigadores.get(indexInvestigador).getContadorDeAnalisis(), nombreMuestra, nombrePatron);
+           
+                    //Se crea una variable que almacena la fecha
+                    Date current = new Date();
+                    SimpleDateFormat formato = new SimpleDateFormat("dd-MM-YYYY");
+                    
+                    //Se crea una variable que almacena la hora
+                    DateFormat format = new SimpleDateFormat("HH:mm:ss");
+                    Date fecha = new Date();
+            
+                    //Se agregan los resultados a la tabla en tiempo de ejecución
+                    tabulador.agregar_resultado(dtm_resultados, String.valueOf(Escribir_investigador.investigadores.get(indexInvestigador).getContadorDeAnalisis()), nombreMuestra, nombrePatron, formato.format(current), format.format(fecha), "Fallido", ver);
+                    
+                    //Se crea el reporte en html
+                    tabulador.crear_reporte(muestra, patron, temporal3, modular, String.valueOf(Escribir_investigador.investigadores.get(indexInvestigador).getContadorDeAnalisis()), nombreMuestra, nombrePatron, 0);
+                    
+                    //Se incrementa el contador de análisis del investigador
+                    Escribir_investigador.investigadores.get(indexInvestigador).setContadorDeAnalisis(Escribir_investigador.investigadores.get(indexInvestigador).getContadorDeAnalisis() + 1);
+                    Escribir_InvestigadorBinario.escribir_investigadorbin(); //Se escribe en el binario la nueva Lista con el contador del investigador actualizado
                 }
             }
         }
+        
     }//GEN-LAST:event_analizar_btnActionPerformed
+
+    private void tabla_resultadosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabla_resultadosMouseClicked
+        //Se guarda el indice de la columna sobre la que se hizo click
+        columna = tabla_resultados.getColumnModel().getColumnIndexAtX(evt.getX()); 
+        //Se guarda el índice de la fila sobre la que se hizo click
+        fila = evt.getY()/tabla_resultados.getRowHeight(); 
+        
+        if(columna<=tabla_resultados.getColumnCount() && columna>=0 && fila<=tabla_resultados.getRowCount() && fila>=0){ //Condición para validar que exista al menos una columna y una fila
+            
+            Object obj = tabla_resultados.getValueAt(fila, columna);
+            
+            if(obj instanceof JButton){ //Si se presionó el botón ver, se ejecuta el siguiente bloque
+                
+                int index = fila; //Se guarda el índice de la fila de la que se presionó el botón
+                
+                try {
+                   String fecha = (String) tabla_resultados.getModel().getValueAt(index, 3);
+                   String hora = (String) tabla_resultados.getModel().getValueAt(index, 4);
+                   String codigoAnalisis = (String) tabla_resultados.getModel().getValueAt(index, 0);
+                   
+                   fecha = fecha.replaceAll("-", "");
+                   hora = hora.replaceAll(":", "");
+                   
+                   String path = "Analisis" + fecha + "-" + hora + "_" + codigoAnalisis + ".html";
+                   File html = new File(path);
+                   
+                   if(html.exists()){
+                     Desktop.getDesktop().open(html);  
+                   }
+                   else{
+                       JOptionPane.showMessageDialog(null,"El archivo no existe");
+                   }
+
+                } catch (FileNotFoundException e) {
+                    JOptionPane.showMessageDialog(null,"El archivo no existe");
+                } catch (IOException e) {
+                    JOptionPane.showMessageDialog(null,e);
+                }
+            }
+        }
+    }//GEN-LAST:event_tabla_resultadosMouseClicked
 
     /**
      * @param args the command line arguments
@@ -368,7 +536,6 @@ public class Investigador extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollBar jScrollBar1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
     private javax.swing.JLabel label_analisis;
     private javax.swing.JLabel label_investigador;
     private javax.swing.JLabel label_muestra;
@@ -376,5 +543,6 @@ public class Investigador extends javax.swing.JFrame {
     private javax.swing.JLabel label_txtResultados;
     private javax.swing.JLabel laber_resultados;
     private javax.swing.JTabbedPane pestaña_analisis;
+    private javax.swing.JTable tabla_resultados;
     // End of variables declaration//GEN-END:variables
 }

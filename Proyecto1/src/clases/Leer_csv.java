@@ -1,7 +1,6 @@
 package clases;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileReader;
 import javax.swing.JOptionPane;
 import interfaces.Administrador;
@@ -42,20 +41,25 @@ public class Leer_csv {
                 }
                 //Si no se cumple ninguna condición anterior, los datos ingresados se almacenan en el sistema
                 else{
-                    //Se agregan los datos al investigador temporal
-                    investigador_temp.setCodigo(partes[0]);
-                    investigador_temp.setNombre(partes[1]);
-                    investigador_temp.setGenero(Character.toUpperCase(partes[2].charAt(0))); 
-                    investigador_temp.setNumExperimentos(Integer.parseInt(partes[3]));
-                    investigador_temp.setContrasenia(partes[4]);
-                    //El investigador temporal se agrega a la lista de investigadores
-                    Escribir_investigador.investigadores.add(investigador_temp);
-                    //Se actualiza la tabla de investigadores
-                    Actualizar_Tabla.nuevo_elemento(Administrador.dtm1, Escribir_investigador.investigadores);
-                    //Se escribe nuevamente el JComboBox
-                    Escribir_investigador.Escribir_investigadorCombo(Administrador.combo_investigador, Escribir_investigador.investigadores);
-                    //Se limpia el objeto investigador_temp
-                    investigador_temp = new Investigador();   
+                    try {
+                        //Se agregan los datos al investigador temporal
+                        investigador_temp.setCodigo(partes[0]);
+                        investigador_temp.setNombre(partes[1]);
+                        investigador_temp.setGenero(Character.toUpperCase(partes[2].charAt(0))); 
+                        investigador_temp.setNumExperimentos(Integer.parseInt(partes[3]));
+                        investigador_temp.setContrasenia(partes[4]);
+                        //El investigador temporal se agrega a la lista de investigadores
+                        Escribir_investigador.investigadores.add(investigador_temp);
+                        //Se actualiza la tabla de investigadores
+                        Actualizar_Tabla.nuevo_elemento(Administrador.dtm1, Escribir_investigador.investigadores);
+                        //Se escribe nuevamente el JComboBox
+                        Escribir_investigador.Escribir_investigadorCombo(Administrador.combo_investigador, Escribir_investigador.investigadores);
+                        //Se limpia el objeto investigador_temp
+                        investigador_temp = new Investigador();   
+                    } catch (IndexOutOfBoundsException e) {
+                        JOptionPane.showMessageDialog(null, "Ocurrió un error al ingresar uno de los investigadores porque no se completaron todos los campos");
+                    }
+                    
                 }
                 genero = '\u0000'; 
             }

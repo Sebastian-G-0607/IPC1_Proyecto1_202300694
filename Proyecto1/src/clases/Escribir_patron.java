@@ -4,7 +4,6 @@
  */
 package clases;
 
-import static clases.Escribir_muestra.muestras;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JComboBox;

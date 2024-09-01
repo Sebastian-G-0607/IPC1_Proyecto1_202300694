@@ -6,11 +6,8 @@ package interfaces;
 
 import clases.Actualizar_Tabla;
 import clases.Cargar_csv;
-import clases.Escribir_muestra;
-import clases.Escribir_muestraBinaria;
 import clases.Escribir_patron;
 import clases.Escribir_patronBinario;
-import clases.Muestra;
 import clases.Patron;
 import java.io.IOException;
 import javax.swing.JOptionPane;
