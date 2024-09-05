@@ -38,13 +38,6 @@ public class Escribir_investigador {
             combo.addItem(investigador_temp.getNombre());
         }    
         
-        
     }
-    
-    public static void indiceDeMuestra_investigador(List<Object> muestras){
-        
-    }
-            
-    
-      
+       
 }

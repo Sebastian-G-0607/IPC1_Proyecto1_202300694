@@ -4,23 +4,25 @@ package interfaces;
 import clases.Actualizar_Tabla;
 import clases.Escribir_investigador;
 import clases.Investigador;
-import javax.swing.JButton;
-import javax.swing.JOptionPane;
-import javax.swing.table.DefaultTableModel;
 import clases.RenderTabla;
 import clases.Cargar_csv;
 import clases.Escribir_InvestigadorBinario;
 import clases.Escribir_muestra;
 import clases.Escribir_muestraBinaria;
 import clases.Escribir_patron;
+import clases.Grafica_investigadores;
 import clases.Muestra;
 import clases.Patron;
+import clases.Top_3;
 import java.awt.Desktop;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import javax.swing.UIManager;
+import javax.swing.JButton;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -32,7 +34,6 @@ public class Administrador extends javax.swing.JFrame {
     public static DefaultTableModel dtm1 = new DefaultTableModel(); //default table model para investigadores
     public static DefaultTableModel dtm_muestras; //default table model para muestras
     public static DefaultTableModel dtm_patrones; //default table model para patrones
-    private JButton cerrarsesion;
 
     //Creación del botón VER de la tabla de muestras
     public static JButton ver = new JButton("VER");
@@ -78,6 +79,16 @@ public class Administrador extends javax.swing.JFrame {
             }
         }
         
+        if(Escribir_investigador.investigadores != null && Escribir_investigador.investigadores.size() >= 3){
+            Grafica_investigadores graficador = new Grafica_investigadores();
+
+            Top_3 top = new Top_3();
+            top.obtener_top3(Escribir_investigador.investigadores);
+            top.nombres_experimentos(Escribir_investigador.investigadores, top.getCodigo1(), top.getCodigo2(), top.getCodigo3());
+
+            graficador.graficar(top.getNum1(), top.getNum2(), top.getNum3(), top.getNombre1(), top.getNombre2(), top.getNombre3());
+        }
+        
         //Se lee el ArrayList de muestras y se agregan los elementos al JTable  y JCoboBox correspondiente, si no hay elementos no se realiza ninguna acción
         if (Escribir_muestra.muestras != null || Escribir_muestra.muestras.size() != 0) {
             for (Muestra muestra_temp : Escribir_muestra.muestras) {
@@ -102,6 +113,11 @@ public class Administrador extends javax.swing.JFrame {
         dtm1.setColumnIdentifiers(id); //Se agrega el vector id al encabezado del dtm_muestras
         tabla_investigadores.setModel(dtm1); //A la tabla muestras se le asigna el modelo que se definió arriba
         tabla_investigadores.setRowHeight(20); //Se ajusta el alto de la fila
+//        tabla_investigadores.setAutoResizeMode(4);
+        tabla_investigadores.getColumnModel().getColumn(3).setPreferredWidth(35);
+        tabla_investigadores.getColumnModel().getColumn(2).setPreferredWidth(6);
+        tabla_investigadores.getColumnModel().getColumn(0).setPreferredWidth(15);
+        tabla_investigadores.getColumnModel().getColumn(1).setPreferredWidth(150);
     }
     
     //Función para crear la tabla que contiene las muestras, especial porque se crea un botón en la última columna.
@@ -112,6 +128,7 @@ public class Administrador extends javax.swing.JFrame {
         dtm_muestras.setColumnIdentifiers(id); //Se agrega el vector id al encabezado del dtm_muestras
         tabla_muestras.setModel(dtm_muestras); //A la tabla muestras se le asigna el modelo que se definió arriba
         tabla_muestras.setRowHeight(30); //Se ajusta el alto de la fila
+        
     }
     public void tabla_patrones() {
         tabla_patrones.setDefaultRenderer(Object.class, new RenderTabla());
@@ -140,6 +157,7 @@ public class Administrador extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         tabla_investigadores = new javax.swing.JTable();
         cerrarS_1 = new javax.swing.JButton();
+        panel_grafica = new javax.swing.JPanel();
         pestaña_muestras = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         tabla_muestras = new javax.swing.JTable();
@@ -206,6 +224,11 @@ public class Administrador extends javax.swing.JFrame {
             }
         ));
         jScrollPane1.setViewportView(tabla_investigadores);
+        if (tabla_investigadores.getColumnModel().getColumnCount() > 0) {
+            tabla_investigadores.getColumnModel().getColumn(0).setResizable(false);
+            tabla_investigadores.getColumnModel().getColumn(1).setResizable(false);
+            tabla_investigadores.getColumnModel().getColumn(3).setPreferredWidth(30);
+        }
 
         cerrarS_1.setText("Cerrar Sesión");
         cerrarS_1.addActionListener(new java.awt.event.ActionListener() {
@@ -214,6 +237,17 @@ public class Administrador extends javax.swing.JFrame {
             }
         });
 
+        javax.swing.GroupLayout panel_graficaLayout = new javax.swing.GroupLayout(panel_grafica);
+        panel_grafica.setLayout(panel_graficaLayout);
+        panel_graficaLayout.setHorizontalGroup(
+            panel_graficaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+        panel_graficaLayout.setVerticalGroup(
+            panel_graficaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+
         javax.swing.GroupLayout pestaña_investigadoresLayout = new javax.swing.GroupLayout(pestaña_investigadores);
         pestaña_investigadores.setLayout(pestaña_investigadoresLayout);
         pestaña_investigadoresLayout.setHorizontalGroup(
@@ -221,38 +255,43 @@ public class Administrador extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pestaña_investigadoresLayout.createSequentialGroup()
                 .addGap(33, 33, 33)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 52, Short.MAX_VALUE)
                 .addGroup(pestaña_investigadoresLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pestaña_investigadoresLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                        .addGroup(pestaña_investigadoresLayout.createSequentialGroup()
-                            .addComponent(actualizar_btn)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(eliminar_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGroup(pestaña_investigadoresLayout.createSequentialGroup()
-                            .addComponent(crear_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGap(33, 33, 33)
-                            .addComponent(cargar_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addComponent(cerrarS_1, javax.swing.GroupLayout.Alignment.TRAILING))
+                    .addGroup(pestaña_investigadoresLayout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 52, Short.MAX_VALUE)
+                        .addGroup(pestaña_investigadoresLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pestaña_investigadoresLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addGroup(pestaña_investigadoresLayout.createSequentialGroup()
+                                    .addComponent(actualizar_btn)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(eliminar_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGroup(pestaña_investigadoresLayout.createSequentialGroup()
+                                    .addComponent(crear_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGap(33, 33, 33)
+                                    .addComponent(cargar_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(cerrarS_1, javax.swing.GroupLayout.Alignment.TRAILING)))
+                    .addGroup(pestaña_investigadoresLayout.createSequentialGroup()
+                        .addGap(29, 29, 29)
+                        .addComponent(panel_grafica, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addGap(30, 30, 30))
         );
         pestaña_investigadoresLayout.setVerticalGroup(
             pestaña_investigadoresLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pestaña_investigadoresLayout.createSequentialGroup()
+                .addGap(32, 32, 32)
                 .addGroup(pestaña_investigadoresLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(pestaña_investigadoresLayout.createSequentialGroup()
-                        .addGap(64, 64, 64)
                         .addGroup(pestaña_investigadoresLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(cargar_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(crear_btn, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(26, 26, 26)
+                            .addComponent(crear_btn, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(cargar_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
                         .addGroup(pestaña_investigadoresLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(eliminar_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(actualizar_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(18, 18, 18)
+                        .addComponent(panel_grafica, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(18, 18, 18)
                         .addComponent(cerrarS_1))
-                    .addGroup(pestaña_investigadoresLayout.createSequentialGroup()
-                        .addGap(32, 32, 32)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 360, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 360, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(23, Short.MAX_VALUE))
         );
 
@@ -593,6 +632,18 @@ public class Administrador extends javax.swing.JFrame {
                 Escribir_muestraBinaria.escribir_muestrabin();
                 Actualizar_Tabla.actualizar_muestra(dtm_muestras, indexMuestra, Escribir_muestra.muestras);
                 JOptionPane.showMessageDialog(null,"Se asignó la muestra correctamente al investigador", "", JOptionPane.INFORMATION_MESSAGE); //Mensaje de asignación exitosa
+                
+                if(Escribir_investigador.investigadores != null && Escribir_investigador.investigadores.size() >= 3){
+                    panel_grafica.removeAll();
+     
+                    Grafica_investigadores graficador1 = new Grafica_investigadores();
+
+                    Top_3 top1 = new Top_3();
+                    top1.obtener_top3(Escribir_investigador.investigadores);
+                    top1.nombres_experimentos(Escribir_investigador.investigadores, top1.getCodigo1(), top1.getCodigo2(), top1.getCodigo3());
+
+                    graficador1.graficar(top1.getNum1(), top1.getNum2(), top1.getNum3(), top1.getNombre1(), top1.getNombre2(), top1.getNombre3());
+                } 
             }
         }
 
@@ -606,7 +657,24 @@ public class Administrador extends javax.swing.JFrame {
         if (cargar.cargarCSV() == 1) { //Si se cumple esta condición, el usuario ingresó sí seleccionó un archivo
             try {
                 cargar.cargarAlArray(cargar.ruta); //Se utiliza el método para cargar los investigadores del csv al array y luego grabarlos en el archivo binario
+                
+                if(Escribir_investigador.investigadores != null && Escribir_investigador.investigadores.size() >= 3){
+                    panel_grafica.removeAll();
+     
+                    Grafica_investigadores graficador1 = new Grafica_investigadores();
+
+                    Top_3 top1 = new Top_3();
+                    top1.obtener_top3(Escribir_investigador.investigadores);
+                    top1.nombres_experimentos(Escribir_investigador.investigadores, top1.getCodigo1(), top1.getCodigo2(), top1.getCodigo3());
+
+                    graficador1.graficar(top1.getNum1(), top1.getNum2(), top1.getNum3(), top1.getNombre1(), top1.getNombre2(), top1.getNombre3());
+                }
+                else if(Escribir_investigador.investigadores.size() < 3){
+                    panel_grafica.removeAll();
+                }
+                
                 JOptionPane.showMessageDialog(null, "Carga de investigadores exitosa", "Carga de Investigadores", JOptionPane.INFORMATION_MESSAGE);
+                
             } catch (IOException ex) { //Se captura la excepción
                 JOptionPane.showMessageDialog(null, ex);
             }
@@ -834,6 +902,7 @@ public class Administrador extends javax.swing.JFrame {
     private javax.swing.JLabel label_investigador;
     private javax.swing.JLabel label_muestra;
     private javax.swing.JTabbedPane panel_admin;
+    public static javax.swing.JPanel panel_grafica;
     private javax.swing.JPanel pestaña_asignacion;
     private javax.swing.JPanel pestaña_investigadores;
     private javax.swing.JPanel pestaña_muestras;

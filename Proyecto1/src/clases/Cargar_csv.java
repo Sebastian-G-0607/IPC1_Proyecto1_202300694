@@ -18,7 +18,6 @@ import javax.swing.JOptionPane;
 public class Cargar_csv {
     
     public String ruta;
-    public File ruta_archivo;
     
     //Método para seleccionar el archivo desde el JFileChooser
     public int cargarCSV() { 

@@ -7,7 +7,9 @@ package interfaces;
 import clases.Actualizar_Tabla;
 import clases.Escribir_InvestigadorBinario;
 import clases.Escribir_investigador;
+import clases.Grafica_investigadores;
 import clases.Investigador;
+import clases.Top_3;
 import javax.swing.JOptionPane;
 
 /**
@@ -200,17 +202,31 @@ public class Actualizar_Investigador extends javax.swing.JFrame {
         else if(index != -1){
             if(Escribir_investigador.investigadores.get(index).getNombre().equals(nombre) && Escribir_investigador.investigadores.get(index).getGenero() == genero && Escribir_investigador.investigadores.get(index).getContrasenia().equals(contrasenia)){
                 JOptionPane.showMessageDialog(null,"Debe actualizar al menos un campo");
+        }
+        else{
+                
+            Escribir_investigador.investigadores.get(index).setNombre(nombre);
+            Escribir_investigador.investigadores.get(index).setGenero(genero);
+            Escribir_investigador.investigadores.get(index).setContrasenia(contrasenia);
+            Escribir_InvestigadorBinario.escribir_investigadorbin();
+            Actualizar_Tabla.actualizar_elemento(Administrador.dtm1, index, Escribir_investigador.investigadores);
+            Escribir_investigador.Escribir_investigadorCombo(Administrador.combo_investigador, Escribir_investigador.investigadores);
+            JOptionPane.showMessageDialog(null,"Se actualizó el investigador correctamente");
+
+            if(Escribir_investigador.investigadores != null && Escribir_investigador.investigadores.size() >= 3){
+
+                Administrador.panel_grafica.removeAll();
+
+                Grafica_investigadores graficador1 = new Grafica_investigadores();
+
+                Top_3 top = new Top_3();
+                top.obtener_top3(Escribir_investigador.investigadores);
+                top.nombres_experimentos(Escribir_investigador.investigadores, top.getCodigo1(), top.getCodigo2(), top.getCodigo3());
+
+                graficador1.graficar(top.getNum1(), top.getNum2(), top.getNum3(), top.getNombre1(), top.getNombre2(), top.getNombre3());
             }
-            else{
-                Escribir_investigador.investigadores.get(index).setNombre(nombre);
-                Escribir_investigador.investigadores.get(index).setGenero(genero);
-                Escribir_investigador.investigadores.get(index).setContrasenia(contrasenia);
-                Escribir_InvestigadorBinario.escribir_investigadorbin();
-                Actualizar_Tabla.actualizar_elemento(Administrador.dtm1, index, Escribir_investigador.investigadores);
-                Escribir_investigador.Escribir_investigadorCombo(Administrador.combo_investigador, Escribir_investigador.investigadores);
-                JOptionPane.showMessageDialog(null,"Se actualizó el investigador correctamente");
-                dispose();
-            }
+            dispose();
+        }
             
         }
         else if(index == -1){

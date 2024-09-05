@@ -26,8 +26,7 @@ public class MuestraDeInvestigador {
         }
         
         investigadores.get(indexInvestigador).getMuestra_asignada().remove(indexMuestra);
-        
-        
+  
     }
     
     

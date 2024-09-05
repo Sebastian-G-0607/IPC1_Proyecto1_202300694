@@ -3,11 +3,13 @@ package interfaces;
 import clases.Actualizar_Tabla;
 import clases.Escribir_InvestigadorBinario;
 import clases.Escribir_investigador;
-import javax.swing.JOptionPane;
 import clases.Muestra;
 import clases.Escribir_muestra;
+import clases.Grafica_investigadores;
+import clases.Top_3;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.JOptionPane;
 /**
  *
  * @author sebas
@@ -133,6 +135,23 @@ public class Eliminar_Investigador extends javax.swing.JFrame {
             Actualizar_Tabla.eliminar_elemento(Administrador.dtm1, index); //Se elimina el registro de la tabla
             Escribir_InvestigadorBinario.escribir_investigadorbin(); //Se sobreescribe el binario con el nuevo arrayList
             Escribir_investigador.Escribir_investigadorCombo(Administrador.combo_investigador, Escribir_investigador.investigadores); //Se actualiza el JComboBox de investigadores
+            
+            if(Escribir_investigador.investigadores != null && Escribir_investigador.investigadores.size() >= 3){
+                
+                Administrador.panel_grafica.removeAll();
+     
+                Grafica_investigadores graficador1 = new Grafica_investigadores();
+
+                Top_3 top1 = new Top_3();
+                top1.obtener_top3(Escribir_investigador.investigadores);
+                top1.nombres_experimentos(Escribir_investigador.investigadores, top1.getCodigo1(), top1.getCodigo2(), top1.getCodigo3());
+
+                graficador1.graficar(top1.getNum1(), top1.getNum2(), top1.getNum3(), top1.getNombre1(), top1.getNombre2(), top1.getNombre3());
+            }
+            else if(Escribir_investigador.investigadores.size() < 3){
+                Administrador.panel_grafica.removeAll();
+            }
+            
         }
         
         

@@ -66,8 +66,7 @@ public class Investigador extends javax.swing.JFrame {
                 //Se crea una copia temporal de la muestra en la posición i de la lista de muestras del investigador. Se debe realizar un casteo del objeto a tipo Muestra para conseguir los métodos de ese tipo de objetos
                 Muestra muestra_temp = (Muestra) Escribir_investigador.investigadores.get(indexInvestigador).getMuestra_asignada().get(i);
                 combo_muestra.addItem(muestra_temp.getDescripcion()); //Se agega la descripción de la muestra al JComboBox
-            }
-            
+            }   
         }
         
         //Si existen patrones almacenados en el sistema, se agregan todos al JComboBox
