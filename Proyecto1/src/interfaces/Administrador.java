@@ -727,7 +727,6 @@ public class Administrador extends javax.swing.JFrame {
                     File html = new File(path);
                     Desktop.getDesktop().open(html);
 
-//                    System.out.println("Archivo HTML creado exitosamente en: " + path);
                 } catch (IOException e) {
                     JOptionPane.showMessageDialog(null,e);
                 }
@@ -856,7 +855,7 @@ public class Administrador extends javax.swing.JFrame {
                     File html = new File(path);
                     Desktop.getDesktop().open(html);
 
-//                    System.out.println("Archivo HTML creado exitosamente en: " + path);
+
                 } catch (IOException e) {
                     JOptionPane.showMessageDialog(null,e);
                 }

@@ -163,7 +163,6 @@ public class Crear_Investigador extends javax.swing.JFrame {
             investigador.setGenero(genero);
             investigador.setContrasenia(contrasenia);
             investigador.setNumExperimentos(0);
-            investigador.setMuestra_asignada(null);
             
             //Se agrega el investigador temporal a la lista
             Escribir_investigador.investigadores.add(investigador);

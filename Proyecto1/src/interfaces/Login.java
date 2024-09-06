@@ -112,8 +112,8 @@ public class Login extends javax.swing.JFrame {
         jPanel1.add(label_password, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 180, 300, 40));
 
         label_logo.setFont(new java.awt.Font("Arial Rounded MT Bold", 1, 24)); // NOI18N
-        label_logo.setText("     QUIMIK");
-        jPanel1.add(label_logo, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 20, 160, 20));
+        label_logo.setText("     IPC - QUIMIK");
+        jPanel1.add(label_logo, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 20, 220, 20));
 
         label_sesion.setFont(new java.awt.Font("Arial Rounded MT Bold", 1, 24)); // NOI18N
         label_sesion.setText("INICIAR SESION");
@@ -191,6 +191,7 @@ public class Login extends javax.swing.JFrame {
         else if(Leer_contrasenias.leer_contrasenias(user, password, Escribir_investigador.investigadores) != -1){
             dispose(); //Se cierra la interfaz LOGIN
             indexInvestigador = Leer_contrasenias.leer_contrasenias(user, password, Escribir_investigador.investigadores);
+
             new Investigador().setVisible(true); //Se instancia un objeto de tipo Investigador y se hace visible
         }
         

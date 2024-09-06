@@ -151,7 +151,7 @@ public class Eliminar_Investigador extends javax.swing.JFrame {
             else if(Escribir_investigador.investigadores.size() < 3){
                 Administrador.panel_grafica.removeAll();
             }
-            
+            this.dispose();
         }
         
         
